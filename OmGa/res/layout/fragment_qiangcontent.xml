@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="8dip"
     android:paddingRight="8dip"
-    android:orientation="vertical"
+    android:gravity="center"
     >
 <!--     The PullToRefreshListView replaces a standard ListView widget. -->
 
@@ -20,24 +20,24 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:smoothScrollbar="true" 
-
-        />
-	<ProgressBar 
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:visibility="gone"
-		android:indeterminateDrawable="@anim/loading"
         />
-    <TextView 
+    
+	<ProgressBar
+	    android:id="@+id/progressBar"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true"
+	    android:indeterminateDrawable="@anim/loading" />
+
+    <TextView
         android:id="@+id/networkTips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:text="请检查网络并下拉刷新"
-        android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:visibility="visible"
-        />
-</LinearLayout>
+        android:textSize="18sp"/>
+
+
+</RelativeLayout>
