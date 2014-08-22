@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <integer-array name="gplus_colors">
+        <item>@color/gplus_color_1</item>
+        <item>@color/gplus_color_2</item>
+        <item>@color/gplus_color_3</item>
+        <item>@color/gplus_color_4</item>
+    </integer-array>
+    
+     <color name="gplus_color_1">#3e802f</color>
+    <color name="gplus_color_2">#427fed</color>
+    <color name="gplus_color_3">#b23424</color>
+    <color name="gplus_color_4">#f4b400</color>
+    
+    <color name="theme_color">#D95555</color>
+    <color name="second_color">#888888</color>
+    <drawable name="bg_ic_navi_normal">#FFFFFF</drawable>
+    <drawable name="bg_ic_navi_pressed">#EEEEEE</drawable>
+    
+    <color name="login_btn_qq_bg_normal">#ff4bc1f3</color>
+    <color name="login_btn_qq_bg_pressed">#ff2884ab</color>
+    <color name="login_btn_weibo_bg_normal">#fff86f45</color>
+    <color name="login_btn_weibo_bg_pressed">#ffae4e30</color>
+    
+    <color name="login_split_line">#ffd5d5d5</color>
+    <color name="bg">#ffededed</color>
+    
+     <color name="edit_info_edit_text_color">#ff86868c</color>
+     
+     <color name="login_btn_bg_normal">#ff8ec52f</color>
+    <color name="login_btn_bg_press">#ff709d00</color>
+</resources>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navi_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_navi" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="top"
+        android:orientation="vertical" >
+
+     	 <LinearLayout
+	          android:id="@+id/ll_btn_user"
+	          android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
+	          android:clickable="true"
+	          android:gravity="center_vertical"
+	          android:orientation="horizontal" >
+
+            <com.klisly.omga.view.CircleImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/my"
+                android:paddingLeft="10dp" />
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="10.0dip"
+                android:text="哦买噶" />
+        </LinearLayout>
+         <LinearLayout
+	          android:id="@+id/ll_login"
+	          android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
+	          android:clickable="true"
+	          android:gravity="center_vertical"
+	          android:orientation="vertical" >
+     	 <TextView
+            android:id="@+id/tv_login"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_home"
+            android:text="登录"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+		</LinearLayout>
+		<TextView
+            android:id="@+id/tv_navi_tuwen"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_home"
+            android:text="图文"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+		<TextView
+            android:id="@+id/tv_navi_duanzi"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_home"
+            android:text="段子"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+		
+		<TextView
+            android:id="@+id/tv_navi_neihantu"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_home"
+            android:text="内涵图"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+		<TextView
+            android:id="@+id/tv_navi_collect"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_home"
+            android:text="我赞过的"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+		<TextView
+            android:id="@+id/tv_navi_me"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_settings"
+            android:text="我"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/tv_navi_settings"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_settings"
+            android:text="设置"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/tv_navi_intro"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_intro"
+            android:text="推荐" 
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/tv_navi_about"
+            style="@style/navitext"
+            android:drawableLeft="@drawable/ic_navi_about"
+            android:text="关于"
+            android:drawablePadding="8dp"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+</RelativeLayout>

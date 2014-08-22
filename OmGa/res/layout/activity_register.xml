@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar_register"
+        style="@style/ActionBar" >
+    </com.markupartist.android.widget.ActionBar>
+
+   <LinearLayout 
+	    android:orientation="vertical" 
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:layout_below="@id/actionbar_register"
+	    android:layout_marginLeft="20.0dip" 
+	    android:layout_marginRight="20.0dip">
+	    <LinearLayout 
+               android:orientation="vertical" 
+               android:id="@+id/input_group" 
+               android:layout_width="fill_parent" 
+               android:layout_height="wrap_content"
+               android:focusable="true"   
+			   android:focusableInTouchMode="true"
+               >
+               <com.klisly.omga.view.DeletableEditText 
+                   android:id="@+id/et_userName" 
+                   android:hint="用户名" 
+                   android:drawableLeft="@drawable/user_account"
+   				   android:drawableRight="@drawable/user_delete"
+                   android:singleLine="true" 
+                   style="@style/EditText"
+                    />
+               <com.klisly.omga.view.DeletableEditText 
+                   android:id="@+id/et_passwd" 
+                   android:layout_marginTop="10.0dip" 
+                   android:hint="密码" 
+                   android:singleLine="true" 
+                   android:drawableLeft="@drawable/user_password"
+   				android:drawableRight="@drawable/user_delete"
+                   style="@style/EditText"
+                   />
+               <com.klisly.omga.view.DeletableEditText 
+                   android:id="@+id/et_email" 
+                   android:layout_marginTop="10.0dip" 
+                   android:hint="邮箱" 
+                   android:singleLine="true" 
+                   android:drawableLeft="@drawable/user_name"
+   					android:drawableRight="@drawable/user_delete"
+                   style="@style/EditText"
+                   />
+           </LinearLayout>
+	    <Button 
+	        android:id="@+id/btn_register" 
+	        android:layout_width="fill_parent" 
+	        android:layout_height="50.0dip" 
+	        android:layout_marginTop="30.0dip" 
+	        android:text="注册" 
+	        style="@style/login_btn"
+	        />
+	</LinearLayout>
+</RelativeLayout>
