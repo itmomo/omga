@@ -35,12 +35,14 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 	
 	public static final String TAG = "AIContentAdapter";
 	public static final int SAVE_FAVOURITE = 2;
-
+	
 	public AIContentAdapter(Context context, List<Qiushi> list) {
 		super(context, list);
 		// TODO Auto-generated constructor stub
 	}
-
+	public void refresh() {    
+        notifyDataSetChanged();    
+     }   
 	@Override
 	public View getConvertView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
@@ -54,9 +56,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 			viewHolder.contentText = (TextView)convertView.findViewById(R.id.content_text);
 			viewHolder.contentImage = (ImageView)convertView.findViewById(R.id.content_image);
 			viewHolder.love = (TextView)convertView.findViewById(R.id.item_action_love);
-			viewHolder.hate = (TextView)convertView.findViewById(R.id.item_action_hate);
 			viewHolder.share = (TextView)convertView.findViewById(R.id.item_action_share);
-			viewHolder.comment = (TextView)convertView.findViewById(R.id.item_action_comment);
 			convertView.setTag(viewHolder);
 		}else{
 			viewHolder = (ViewHolder)convertView.getTag();
@@ -126,7 +126,6 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		}else{
 			viewHolder.love.setTextColor(Color.parseColor("#000000"));
 		}
-		viewHolder.hate.setText(entity.getBad()+"");
 		viewHolder.love.setOnClickListener(new OnClickListener() {
 //			boolean oldFav = entity.getMyFav();
 			@Override
@@ -182,30 +181,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 //				});
 			}
 		});
-		viewHolder.hate.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				entity.setBad(entity.getBad()+1);
-				viewHolder.hate.setText(entity.getBad()+"");
-				entity.increment("hate",1);
-				entity.update(mContext, new UpdateListener() {
-					
-					@Override
-					public void onSuccess() {
-						// TODO Auto-generated method stub
-						ActivityUtil.show(mContext, "点踩成功~");
-					}
-
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-			}
-		});
+		
 		viewHolder.share.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -261,9 +237,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		public TextView contentText;
 		public ImageView contentImage;
 		public TextView love;
-		public TextView hate;
 		public TextView share;
-		public TextView comment;
 	}
 	
 //	private void onClickFav(View v,final Qiushi qiushi) {

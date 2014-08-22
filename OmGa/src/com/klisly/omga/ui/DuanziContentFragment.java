@@ -37,15 +37,12 @@ import com.klisly.omga.ui.base.BaseFragment;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
-
 /**
- * @author kingofglory
- *         email: kingofglory@yeah.net
- *         blog:  http:www.google.com
- * @date 2014-2-23s
- * TODO
+ * 添加段子图页面
+ * @author wizardholy 
+ * @email wizardholy@163.com
+ * @data 2014年8月22日 下午8:20:52
  */
-
 public class DuanziContentFragment extends BaseFragment{
 	
 	private View contentView ;

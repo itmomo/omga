@@ -20,7 +20,7 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:smoothScrollbar="true" 
-        android:visibility="gone"
+        android:visibility="visible"
         />
     
 	<ProgressBar

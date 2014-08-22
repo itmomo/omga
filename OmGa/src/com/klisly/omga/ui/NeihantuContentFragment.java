@@ -39,7 +39,7 @@ import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
 /**
- * 内涵图fragment
+ * 内涵图页面
  * @author wizardholy 
  * @email wizardholy@163.com
  * @data 2014年8月21日 下午9:42:11
@@ -178,7 +178,7 @@ public class NeihantuContentFragment extends BaseFragment{
 //						list = DatabaseUtil.getInstance(mContext).setFav(list);
 					}
 					mListItems.addAll(list);
-					mAdapter.notifyDataSetChanged();
+					mAdapter.notifyDataSetChanged();;
 					
 					setState(LOADING_COMPLETED);
 					mPullRefreshListView.onRefreshComplete();

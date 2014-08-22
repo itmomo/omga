@@ -52,9 +52,7 @@ public class PersonCenterContentAdapter extends BaseContentAdapter<Qiushi>{
 			viewHolder.contentText = (TextView)convertView.findViewById(R.id.content_text);
 			viewHolder.contentImage = (ImageView)convertView.findViewById(R.id.content_image);
 			viewHolder.love = (TextView)convertView.findViewById(R.id.item_action_love);
-			viewHolder.hate = (TextView)convertView.findViewById(R.id.item_action_hate);
 			viewHolder.share = (TextView)convertView.findViewById(R.id.item_action_share);
-			viewHolder.comment = (TextView)convertView.findViewById(R.id.item_action_comment);
 			convertView.setTag(viewHolder);
 		}else{
 			viewHolder = (ViewHolder)convertView.getTag();
