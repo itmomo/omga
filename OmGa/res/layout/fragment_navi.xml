@@ -52,13 +52,6 @@
             android:textColor="#FFFFFF" />
 		</LinearLayout>
 		<TextView
-            android:id="@+id/tv_navi_tuwen"
-            style="@style/navitext"
-            android:drawableLeft="@drawable/ic_navi_home"
-            android:text="图文"
-            android:drawablePadding="8dp"
-            android:textColor="#FFFFFF" />
-		<TextView
             android:id="@+id/tv_navi_duanzi"
             style="@style/navitext"
             android:drawableLeft="@drawable/ic_navi_home"

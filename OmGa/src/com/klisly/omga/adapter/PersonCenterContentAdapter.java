@@ -3,26 +3,14 @@ package com.klisly.omga.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobPointer;
-import cn.bmob.v3.datatype.BmobRelation;
-import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.entity.Qiushi;
-import com.klisly.omga.entity.User;
-import com.klisly.omga.sns.TencentShareEntity;
-import com.klisly.omga.ui.UserLoginActivity;
-import com.klisly.omga.utils.ActivityUtil;
-import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
 /**
  * 
@@ -231,23 +219,7 @@ public class PersonCenterContentAdapter extends BaseContentAdapter<Qiushi>{
 		return convertView;
 	}
 	
-	 private TencentShareEntity getQQShareEntity(Qiushi qiushi) {
-	        String title= "这里好多美丽的风景";
-	        String comment="来领略最美的风景吧";
-	        String img= null;
-	        if(qiushi.getUrl_image()!=null){
-	        	img = qiushi.getUrl_image();
-	        }else{
-	        	img = "http://www.codenow.cn/appwebsite/website/yyquan/uploads/53af6851d5d72.png";
-	        }
-	        String summary=qiushi.getContent();
-	        
-	        String targetUrl="http://yuanquan.bmob.cn";
-	        TencentShareEntity entity=new TencentShareEntity(title, img, targetUrl, summary, comment);
-	        return entity;
-	    }
-
-
+	 
 	public static class ViewHolder{
 		public ImageView userLogo;
 		public TextView userName;

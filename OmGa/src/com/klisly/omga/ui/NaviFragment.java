@@ -38,7 +38,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 
 	private static final int DUANZIFRAGMENT = 0;
 	private static final int NEIHANTUFRAGMENT = 1;
-	private static final int TUWENFRAGMENT = 2;
 	private static final int LOGINFRAGMENT = 3;
 	private static final int USERCENTERFRAGMENT = 4;
 	private static final int SETTINGSFRAGMENT = 5;
@@ -53,7 +52,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 	private TextView navi_login;
 	private TextView navi_duanzi;
 	private TextView navi_neihantu;
-	private TextView navi_tuwen;
 	private TextView navi_me;
 	private TextView navi_settings;
 	private TextView navi_intro;
@@ -139,7 +137,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		navi_login = (TextView) rootView.findViewById(R.id.tv_login);
 		navi_duanzi = (TextView) rootView.findViewById(R.id.tv_navi_duanzi);
 		navi_neihantu = (TextView) rootView.findViewById(R.id.tv_navi_neihantu);
-		navi_tuwen = (TextView) rootView.findViewById(R.id.tv_navi_tuwen);
 		navi_settings = (TextView) rootView.findViewById(R.id.tv_navi_settings);
 		navi_me = (TextView) rootView.findViewById(R.id.tv_navi_me);
 		navi_intro = (TextView) rootView.findViewById(R.id.tv_navi_intro);
@@ -152,7 +149,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		navi_login.setOnClickListener(this);
 		navi_duanzi.setOnClickListener(this);
 		navi_neihantu.setOnClickListener(this);
-		navi_tuwen.setOnClickListener(this);
 		navi_me.setOnClickListener(this);
 		navi_settings.setOnClickListener(this);
 		navi_intro.setOnClickListener(this);
@@ -185,10 +181,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 			changeButtonState(NEIHANTUFRAGMENT);
 			OnTabSelected(NEIHANTUFRAGMENT);
 			break;
-		case R.id.tv_navi_tuwen:
-			changeButtonState(TUWENFRAGMENT);
-			OnTabSelected(TUWENFRAGMENT);
-			break;
 		case R.id.tv_navi_settings://
 			changeButtonState(SETTINGSFRAGMENT);
 			OnTabSelected(SETTINGSFRAGMENT);
@@ -216,11 +208,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 			navi_duanzi.setSelected(true);
 		}else{
 			navi_duanzi.setSelected(false);
-		}
-		if(index == TUWENFRAGMENT){
-			navi_tuwen.setSelected(true);
-		}else{
-			navi_tuwen.setSelected(false);
 		}
 		if(index == NEIHANTUFRAGMENT){
 			navi_neihantu.setSelected(true);
@@ -275,15 +262,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 				transaction.add(R.id.center, mNeihantufragment);
 			} else {
 				transaction.show(mNeihantufragment);
-			}
-			break;
-		case TUWENFRAGMENT:
-			hideFragments(transaction);
-			if (null == mDuanzifragment) {
-				mDuanzifragment = new DuanziContentFragment();
-				transaction.add(R.id.center, mDuanzifragment);
-			} else {
-				transaction.show(mDuanzifragment);
 			}
 			break;
 		case USERCENTERFRAGMENT:

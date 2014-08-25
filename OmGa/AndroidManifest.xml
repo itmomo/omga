@@ -20,7 +20,10 @@
    	<uses-permission android:name="android.permission.WRITE_SETTINGS"/>
    	<uses-permission android:name="android.permission.GET_TASKS"/>
    	<uses-permission android:name="android.permission.REORDER_TASKS"/>
-   	
+   	<uses-permission android:name="android.permission.GET_TASKS" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
    	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
    	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
    	
@@ -71,7 +74,7 @@
          		  android:theme="@android:style/Theme.NoTitleBar"/>
          <activity android:name="com.umeng.fb.ContactActivity"
                   android:theme="@android:style/Theme.NoTitleBar"/>
-         <meta-data android:value="5306c26856240b946c0b82d7" android:name="UMENG_APPKEY"></meta-data>
+         <meta-data android:value="53e5af80fd98c5cff001ad6d" android:name="UMENG_APPKEY"></meta-data>
          <meta-data android:value="QD_umeng" android:name="UMENG_CHANNEL"/>
          <meta-data android:name="UMENG_MESSAGE_SECRET" android:value="aa303ab2933220ee2d82cc7ac3575768"/>
     	 <!-- umeng update -->
@@ -162,24 +165,21 @@
     				   android:value="10190" >
 			</meta-data>
 			
-			        <!-- openqq -->
-         <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+		
+        <!-- ShareSDK 分享 -->
         <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent100548485" />
- 				<!-- 100380359 100381104 222222 -->
-            </intent-filter>
-        </activity>
+		  android:name="cn.sharesdk.framework.ShareSDKUIShell"
+		  android:theme="@android:style/Theme.Translucent.NoTitleBar"
+		  android:configChanges="keyboardHidden|orientation|screenSize"
+		  android:screenOrientation="portrait"
+		  android:windowSoftInputMode="stateHidden|adjustResize" >
+		   <intent-filter>
+		        <data android:scheme="tencent100371282" />
+		        <action android:name="android.intent.action.VIEW" />
+		        <category android:name="android.intent.category.BROWSABLE" />
+		        <category android:name="android.intent.category.DEFAULT" />
+		    </intent-filter>
+		</activity>
          <!-- MAT -->
         <!-- 请将value改为MTA分配的appkey < -->
         <meta-data
