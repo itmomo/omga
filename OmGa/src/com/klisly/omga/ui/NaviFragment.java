@@ -1,6 +1,6 @@
 package com.klisly.omga.ui;
 
-import net.youmi.android.offers.OffersManager;
+import net.youmi.android.diy.DiyManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,8 +22,6 @@ import cn.bmob.v3.datatype.BmobFile;
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.entity.User;
-import com.klisly.omga.utils.ActivityUtil;
-import com.klisly.omga.utils.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
@@ -291,7 +289,7 @@ public class NaviFragment extends Fragment implements OnClickListener {
 			}
 			break;
 		case INTROFRAGMENT:
-			OffersManager.getInstance(mActivity).showOffersWall();
+			DiyManager.showRecommendWall(getActivity());
 			break;
 		case ABOUTFRAGMENT:
 			hideFragments(transaction);

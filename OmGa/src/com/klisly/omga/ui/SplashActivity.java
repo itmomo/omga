@@ -1,7 +1,6 @@
 package com.klisly.omga.ui;
 
 import net.youmi.android.AdManager;
-import net.youmi.android.offers.OffersManager;
 import android.os.Bundle;
 import android.os.Handler;
 import cn.bmob.v3.Bmob;
@@ -11,6 +10,7 @@ import com.klisly.omga.ui.base.BaseActivity;
 import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
 import com.klisly.omga.utils.UmengStat;
+import com.tencent.stat.StatService;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.message.PushAgent;
@@ -33,7 +33,7 @@ public class SplashActivity extends BaseActivity {
 		//Bmob SDK初始化--只需要这一段代码即可完成初始化
 				//请到Bmob官网(http://www.bmob.cn/)申请ApplicationId,具体地址:http://docs.bmob.cn/android/faststart/index.html?menukey=fast_start&key=start_android
 		Bmob.initialize(this, Constant.BMOB_APP_ID);
-		
+		StatService.trackCustomEvent(this, "onCreate", "");
 		LogUtils.i(TAG,TAG + " Launched ！");
 		//友盟统计反馈代码
 		MobclickAgent.openActivityDurationTrack(UmengStat.IS_OPEN_ACTIVITY_AUTO_STAT);
@@ -51,8 +51,8 @@ public class SplashActivity extends BaseActivity {
 			mPushAgent.disable();
 		}
 		
-		AdManager.getInstance(mContext).init("67daabfc8ffec9c7", "7748a02fe32d6532", false);
-		OffersManager.getInstance(mContext);
+		AdManager.getInstance(mContext).init("ad08ed9b63b3e95f", "abf86ba7453e1f20", false);
+		
 	}
 	
 	/**

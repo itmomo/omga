@@ -1,20 +1,16 @@
 package com.klisly.omga.ui;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.proxy.UserProxy;
-import com.klisly.omga.proxy.UserProxy.ILoginListener;
 import com.klisly.omga.proxy.UserProxy.ISignUpListener;
 import com.klisly.omga.ui.base.BasePageActivity;
 import com.klisly.omga.utils.ActivityUtil;
@@ -23,7 +19,6 @@ import com.klisly.omga.utils.StringUtils;
 import com.klisly.omga.view.DeletableEditText;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.Action;
-import com.tencent.tauth.IRequestListener;
 /**
  * 用户登录页面
  * @author wizardholy 

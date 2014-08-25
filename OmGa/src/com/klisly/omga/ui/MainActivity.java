@@ -1,8 +1,10 @@
 package com.klisly.omga.ui;
 
-import net.youmi.android.offers.OffersManager;
+import net.youmi.android.spot.SpotDialogListener;
+import net.youmi.android.spot.SpotManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -39,6 +41,26 @@ public class MainActivity extends SlidingFragmentActivity implements OnClickList
 		rightMenu.setOnClickListener(this);
 		initFragment();
 		currentUser = BmobUser.getCurrentUser(MainActivity.this);
+		
+		// 插播接口调用
+		// 开发者可以到开发者后台设置展示频率，需要到开发者后台设置页面（详细信息->业务信息->无积分广告业务->高级设置）
+		// 自4.03版本增加云控制是否开启防误点功能，需要到开发者后台设置页面（详细信息->业务信息->无积分广告业务->高级设置）
+
+		// 加载插播资源
+		SpotManager.getInstance(this)
+				.loadSpotAds();
+		// 设置展示超时时间，加载超时则不展示广告，默认0，代表不设置超时时间
+		SpotManager.getInstance(this)
+				.setSpotTimeout(5000);// 设置5秒
+		SpotManager.getInstance(this)
+				.setShowInterval(20);// 设置20秒的显示时间间隔
+		// 如需要使用自动关闭插屏功能，请取消注释下面方法
+		// SpotManager.getInstance(this)
+		// .setAutoCloseSpot(true);// 设置自动关闭插屏开关
+		// SpotManager.getInstance(this)
+		// .setCloseTime(6000); // 设置关闭插屏时间
+
+		
 	}
 	
 	
@@ -104,12 +126,19 @@ public class MainActivity extends SlidingFragmentActivity implements OnClickList
                 break;
         }
     }
-
+    @Override
+    protected void onStop() {
+    	// 如果不调用此方法，则按home键的时候会出现图标无法显示的情况。
+		SpotManager.getInstance(MainActivity.this)
+				.disMiss(false);
+		super.onStop();
+    };
+    
     @Override
     protected void onDestroy() {
-    	// TODO Auto-generated method stub
+    	SpotManager.getInstance(this)
+		.unregisterSceenReceiver();
     	super.onDestroy();
-    	OffersManager.getInstance(MainActivity.this).onAppExit();
     }
     
 	private static long firstTime;
@@ -119,11 +148,28 @@ public class MainActivity extends SlidingFragmentActivity implements OnClickList
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		if (firstTime + 2000 > System.currentTimeMillis()) {
+		if (firstTime + 2000 > System.currentTimeMillis()&&SpotManager.getInstance(MainActivity.this).checkLoadComplete()) {
+			SpotManager.getInstance(MainActivity.this).disMiss(true);
 			MyApplication.getInstance().exit();
 			super.onBackPressed();
 		} else {
-			ActivityUtil.show(MainActivity.this, "再按一次退出程序");
+			
+			// 展示插播广告，可以不调用loadSpot独立使用
+			SpotManager.getInstance(
+					MainActivity.this).showSpotAds(
+					MainActivity.this,
+					new SpotDialogListener() {
+						@Override
+						public void onShowSuccess() {
+							Log.i("MainActivity", "展示成功");
+						}
+
+						@Override
+						public void onShowFailed() {
+							Log.i("MainActivity", "展示失败");
+						}
+
+					}); // //
 		}
 		firstTime = System.currentTimeMillis();
 	}

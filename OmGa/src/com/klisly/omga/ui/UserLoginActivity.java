@@ -107,18 +107,28 @@ public class UserLoginActivity extends BasePageActivity
 		Intent intent = null;
 		switch (v.getId()) {
 			case R.id.rl_btn_qq_login:
-				
-				break;
-			case R.id.rl_btn_sina_login:
-				BmobUser.weiboLogin(this, "1568284227", "http://omyga.bmob.cn/", new OtherLoginListener() {
+				BmobUser.qqLogin(this,  "1102290758",  new OtherLoginListener() {
 				    @Override
 				    public void onSuccess(JSONObject userAuth) {
-				        ActivityUtil.show(getApplicationContext(),"第三方登陆成功:"+userAuth);
+				    	onLoginSuccess();
 				    }
 
 				    @Override
 				    public void onFailure(int code, String msg) {
 				    	ActivityUtil.show(getApplicationContext(),"第三方登陆失败："+msg);
+				    }
+				});
+				break;
+			case R.id.rl_btn_sina_login:
+				BmobUser.weiboLogin(this, "1568284227", "http://omyga.bmob.cn/", new OtherLoginListener() {
+				    @Override
+				    public void onSuccess(JSONObject userAuth) {
+				    	onLoginSuccess();
+				    }
+
+				    @Override
+				    public void onFailure(int code, String msg) {
+				    	ActivityUtil.show(getApplicationContext(),"第三方登陆失败："+code);
 				    }
 				});
 				break;
