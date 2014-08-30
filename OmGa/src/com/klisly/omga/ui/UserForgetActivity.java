@@ -38,13 +38,11 @@ public class UserForgetActivity extends BasePageActivity
 	
 	@Override
 	protected void setLayoutView() {
-		// TODO Auto-generated method stub
 		setContentView(R.layout.activity_forget);
 	}
 
 	@Override
 	protected void findViews() {
-		// TODO Auto-generated method stub
 		actionbar = (ActionBar)findViewById(R.id.actionbar_forget);
 		mTvBtnFind = (TextView) findViewById(R.id.btn_find);
 		mEtUserName = (DeletableEditText)findViewById(R.id.et_userName);
@@ -53,20 +51,17 @@ public class UserForgetActivity extends BasePageActivity
 
 	@Override
 	protected void setupViews(Bundle bundle) {
-		// TODO Auto-generated method stub
 		 actionbar.setTitle(mContext.getResources().getString(R.string.forget_caption));
 		 actionbar.setDisplayHomeAsUpEnabled(true);
 		 actionbar.setHomeAction(new Action() {
 			
 			@Override
 			public void performAction(View view) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 			
 			@Override
 			public int getDrawable() {
-				// TODO Auto-generated method stub
 				return R.drawable.logo;
 			}
 		});
@@ -80,13 +75,11 @@ public class UserForgetActivity extends BasePageActivity
 
 	@Override
 	protected void fetchData() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 			case R.id.btn_find:
 				

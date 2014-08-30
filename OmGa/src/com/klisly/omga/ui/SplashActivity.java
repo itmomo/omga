@@ -10,7 +10,6 @@ import com.klisly.omga.ui.base.BaseActivity;
 import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
 import com.klisly.omga.utils.UmengStat;
-import com.tencent.stat.StatService;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.message.PushAgent;
@@ -33,7 +32,6 @@ public class SplashActivity extends BaseActivity {
 		//Bmob SDK初始化--只需要这一段代码即可完成初始化
 				//请到Bmob官网(http://www.bmob.cn/)申请ApplicationId,具体地址:http://docs.bmob.cn/android/faststart/index.html?menukey=fast_start&key=start_android
 		Bmob.initialize(this, Constant.BMOB_APP_ID);
-		StatService.trackCustomEvent(this, "onCreate", "");
 		LogUtils.i(TAG,TAG + " Launched ！");
 		//友盟统计反馈代码
 		MobclickAgent.openActivityDurationTrack(UmengStat.IS_OPEN_ACTIVITY_AUTO_STAT);

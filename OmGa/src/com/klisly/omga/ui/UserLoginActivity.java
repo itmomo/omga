@@ -165,6 +165,7 @@ public class UserLoginActivity extends BasePageActivity
 	public void onLoginSuccess() {
 		// TODO Auto-generated method stub
 		ActivityUtil.show(this,this.getResources().getString(R.string.login_success_tip));
+		
 		LogUtils.i(TAG,"login sucessed!");
 		setResult(RESULT_OK);
 		finish();

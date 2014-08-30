@@ -42,7 +42,7 @@
 	             android:maxLength="45"
 	             android:maxWidth="200dp"
 	             android:paddingRight="2dp"
-	             android:text="每天陪你快乐下去！！每天陪你快乐下去！！每天陪你快乐下去！！每天陪你快乐下去！！每天陪你快乐下去！！每天陪你快乐下去！！" />
+	             android:text="这个家伙很懒，什么也不说。。。" />
 	
 	         <com.klisly.omga.view.CircleImageView
 	             android:id="@+id/iv_user_avatar"
@@ -140,7 +140,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="25"
+	            android:text="吃饭，睡觉，打豆豆。。。。"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -212,6 +212,7 @@
 		<RelativeLayout
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
+		    android:visibility="gone"
 		    android:padding="8dp"
 		    android:background="@drawable/selector_settings_item_down"
 		    >

@@ -103,18 +103,17 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 			mTvUserNickName.setText(user.getUsername());
 			if(user.getSignature()!=null)
 				mTvSignature.setText(user.getSignature());
-			if(user.getGender()!=null)
-			if(user.getGender().equals(Constant.SEX_FEMALE)){
-				mTvGender.setText("女");
-				sputil.setValue("sex_settings", 0);
-			}else if(user.getGender().equals(Constant.SEX_MALE)){
-				mTvGender.setText("男");
-				sputil.setValue("sex_settings", 1);
-			}else{
+			if(user.getGender()!=null){
 				mTvGender.setText("保密");
 				sputil.setValue("sex_settings", 2);
+				if(user.getGender().equals(Constant.SEX_FEMALE)){
+					mTvGender.setText("女");
+					sputil.setValue("sex_settings", 0);
+				}else if(user.getGender().equals(Constant.SEX_MALE)){
+					mTvGender.setText("男");
+					sputil.setValue("sex_settings", 1);
+				}
 			}
-			
 			BmobFile avatarFile = user.getAvatar();
 			if(null != avatarFile){
 				ImageLoader.getInstance()
@@ -136,7 +135,11 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 			if(user.getInterest()!=null)
 				mTvInterest.setText(user.getInterest());
 			mTvRegisterDate.setText(user.getCreatedAt().split(" ")[0]);
-			mTvEmail.setText(user.getEmail());
+			if(user.getEmail()!=null&&user.getEmail().length()>0){
+				mTvEmail.setText(user.getEmail());
+			}else{
+				mTvEmail.setVisibility(View.GONE);
+			}
 			if(user.getPhoneserial()!=null)
 			mTvUsedPhone.setText(user.getPhoneserial());
 		}else{

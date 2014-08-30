@@ -23,7 +23,8 @@ public class User extends BmobUser{
 	private BmobDate birthdate;
 	private String interest;
 	private String phoneserial;
-	private BmobRelation favorits;
+	//在项目中用户收藏的糗事id用如下方式存放entity.getObjectId()+";"
+	private String favorits;
 	public String getSignature() {
 		return signature;
 	}
@@ -62,10 +63,11 @@ public class User extends BmobUser{
 		this.phoneserial = phoneserial;
 	}
 	
-	public BmobRelation getFavorits() {
+	
+	public String getFavorits() {
 		return favorits;
 	}
-	public void setFavorits(BmobRelation favorits) {
+	public void setFavorits(String favorits) {
 		this.favorits = favorits;
 	}
 	@Override

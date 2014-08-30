@@ -111,6 +111,7 @@
                         android:drawableLeft="@drawable/user_account"
         				android:drawableRight="@drawable/user_delete"
                         android:singleLine="true" 
+                        android:inputType="text"
                         style="@style/EditText"
                          />
                     <com.klisly.omga.view.DeletableEditText 

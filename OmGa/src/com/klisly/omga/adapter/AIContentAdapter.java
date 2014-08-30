@@ -3,6 +3,7 @@ package com.klisly.omga.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.View;
@@ -11,12 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.entity.Qiushi;
+import com.klisly.omga.entity.User;
+import com.klisly.omga.proxy.UserProxy;
+import com.klisly.omga.ui.UserLoginActivity;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,10 +38,12 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 	
 	public static final String TAG = "AIContentAdapter";
 	public static final int SAVE_FAVOURITE = 2;
-	public static Context  mContext=null;
+	private User mCurrentUser = null;
+	private Context  mContext=null;
 	public AIContentAdapter(Context context, List<Qiushi> list) {
 		super(context, list);
 		this.mContext = context;
+		mCurrentUser = BmobUser.getCurrentUser(this.mContext,User.class);
 	}
 	public void refresh() {    
         notifyDataSetChanged();    
@@ -60,16 +68,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		}
 		final Qiushi entity = dataList.get(position);
 		LogUtils.i("user",entity.toString());
-//		User user = entity.getAuthor();
-//		if(user == null){
-//			LogUtils.i("user","USER IS NULL");
-//		}
-//		if(user.getAvatar()==null){
-//			LogUtils.i("user","USER avatar IS NULL");
-//		}
-//		if(user.getAvatar()!=null){
-//			avatarUrl = user.getAvatar().getFileUrl();
-//		}
+
 		String avatarUrl = null;
 		avatarUrl = entity.getUrl_avatar();
 		ImageLoader.getInstance()
@@ -104,7 +103,6 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 						@Override
 						public void onLoadingComplete(String imageUri, View view,
 								Bitmap loadedImage) {
-							// TODO Auto-generated method stub
 							super.onLoadingComplete(imageUri, view, loadedImage);
 							 float[] cons=ActivityUtil.getBitmapConfiguration(loadedImage, viewHolder.contentImage, 1.0f);
 	                         RelativeLayout.LayoutParams layoutParams=
@@ -118,65 +116,93 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		viewHolder.love.setText(entity.getGood()+"");
 		LogUtils.i("love",entity.getGood()+"..");
 		//设置是否赞过的标志
-		if(entity.getGood()>0){
+		if(mCurrentUser !=null && mCurrentUser.getFavorits()!=null && mCurrentUser.getFavorits().contains(entity.getObjectId()+";")){
 			viewHolder.love.setTextColor(Color.parseColor("#D95555"));
+			viewHolder.love.setTag(true);
 		}else{
 			viewHolder.love.setTextColor(Color.parseColor("#000000"));
+			viewHolder.love.setTag(false);
 		}
 		viewHolder.love.setOnClickListener(new OnClickListener() {
-//			boolean oldFav = entity.getMyFav();
 			@Override
 			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				if(MyApplication.getInstance().getCurrentUser()==null){
-//					ActivityUtil.show(mContext, "请先登录。");
-//					Intent intent = new Intent();
-//					intent.setClass(mContext, RegisterAndLoginActivity.class);
-//					MyApplication.getInstance().getTopActivity().startActivity(intent);
-//					return;
-//				}
-//				if(entity.getMyLove()){
-//					ActivityUtil.show(mContext, "您已赞过啦");
-//					return;
-//				}
+				if(MyApplication.getInstance().getCurrentUser()==null){
+					ActivityUtil.show(mContext, "请先登录。");
+					Intent intent = new Intent();
+					intent.setClass(mContext, UserLoginActivity.class);
+					MyApplication.getInstance().getTopActivity().startActivity(intent);
+					return;
+				}
 				
-//				if(DatabaseUtil.getInstance(mContext).isLoved(entity)){
-//					ActivityUtil.show(mContext, "您已赞过啦");
-//					entity.setMyLove(true);
-//					entity.setLove(entity.getLove()+1);
-//					viewHolder.love.setTextColor(Color.parseColor("#D95555"));
-//					viewHolder.love.setText(entity.getLove()+"");
-//					return;
-//				}
-//				
-//				entity.setLove(entity.getLove()+1);
-//				viewHolder.love.setTextColor(Color.parseColor("#D95555"));
-//				viewHolder.love.setText(entity.getLove()+"");
-//
-//				entity.increment("love",1);
-//				if(entity.getMyFav()){
-//					entity.setMyFav(false);
-//				}
-//				entity.update(mContext, new UpdateListener() {
-//					
-//					@Override
-//					public void onSuccess() {
-//						// TODO Auto-generated method stub
-//						entity.setMyLove(true);
-//						entity.setMyFav(oldFav);
-//						DatabaseUtil.getInstance(mContext).insertFav(entity);
-////						DatabaseUtil.getInstance(mContext).queryFav();
-//						LogUtils.i(TAG, "点赞成功~");
-//					}
-//
-//					@Override
-//					public void onFailure(int arg0, String arg1) {
-//						// TODO Auto-generated method stub
-//						entity.setMyLove(true);
-//						entity.setMyFav(oldFav);
-//					}
-//				});
+				if((Boolean)viewHolder.love.getTag()){
+					viewHolder.love.setText((entity.getGood()-1)+"");
+					entity.increment("good",-1);
+					viewHolder.love.setTextColor(Color.parseColor("#000000"));
+					viewHolder.love.setTag(false);
+					entity.update(mContext,new UpdateListener() {
+						@Override
+						public void onSuccess() {
+							
+				    		mCurrentUser.setFavorits(mCurrentUser.getFavorits().replace(entity.getObjectId()+";", ""));
+				    		mCurrentUser.update(mContext, mCurrentUser.getObjectId(),new UpdateListener() {
+								@Override
+								public void onSuccess() {
+									
+								}
+								@Override
+								public void onFailure(int code, String msg) {
+									ActivityUtil.show(mContext,"取消收藏失败，"+msg);
+									LogUtils.d("AIContentAdapter","取消收藏失败，"+code+":"+msg);
+								}
+							});
+				    		LogUtils.i(TAG, "取消收藏成功~");
+						}
+
+						@Override
+						public void onFailure(int code, String msg) {
+							ActivityUtil.show(mContext,""+msg);
+						}
+					});
+					
+				}else{
+					viewHolder.love.setText((entity.getGood()+1)+"");
+					entity.increment("good",1);
+					viewHolder.love.setTextColor(Color.parseColor("#D95555"));
+					viewHolder.love.setTag(true);
+		    		viewHolder.love.setText(entity.getGood()+"");
+					entity.update(mContext, new UpdateListener() {
+						
+						@Override
+						public void onSuccess() {
+							
+				    		if(mCurrentUser.getFavorits() == null)
+				    			mCurrentUser.setFavorits("");
+				    		mCurrentUser.setFavorits(mCurrentUser.getFavorits()+entity.getObjectId()+";");
+				    		mCurrentUser.update(mContext,mCurrentUser.getObjectId(), new UpdateListener() {
+								
+								@Override
+								public void onSuccess() {
+									
+								}
+								
+								@Override
+								public void onFailure(int code, String msg) {
+									ActivityUtil.show(mContext,"收藏失败，"+msg);
+									LogUtils.d("AIContentAdapter","收藏失败，"+code+":"+msg);
+								}
+							});
+				    		LogUtils.i(TAG, "收藏成功~");
+						}
+
+						@Override
+						public void onFailure(int code, String msg) {
+							ActivityUtil.show(mContext,""+msg);
+						}
+					});
+					
+				}
 			}
+
 		});
 		
 		viewHolder.share.setOnClickListener(new OnClickListener() {
@@ -212,7 +238,6 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		        oks.show( mContext);
 			}
 		});
-//		
 //		if(entity.getMyFav()){
 //			viewHolder.favMark.setImageResource(R.drawable.ic_action_fav_choose);
 //		}else{
