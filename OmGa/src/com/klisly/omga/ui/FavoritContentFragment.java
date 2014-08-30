@@ -41,7 +41,6 @@ import com.klisly.omga.utils.LogUtils;
 public class FavoritContentFragment extends BaseFragment{
 	
 	private View contentView ;
-	private int pageNum;
 	private String lastItemTime;//当前列表结尾的条目的创建时间，
 	
 	private ArrayList<Qiushi> mListItems;
@@ -74,8 +73,6 @@ public class FavoritContentFragment extends BaseFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		pageNum = 0;
-		
 		LogUtils.i(TAG,"curent time:"+lastItemTime);
 	}
 
@@ -139,14 +136,19 @@ public class FavoritContentFragment extends BaseFragment{
 		String favorits = (mCurrentUser.getFavorits()==null)?"":mCurrentUser.getFavorits();
 		String[] favoritArray = favorits.split(";");
 		ArrayList<String> toFetchList = new ArrayList<String>();
-		if(mRefreshType == RefreshType.LOAD_MORE){
-			for(int i = pageNum*Constant.NUMBERS_PER_PAGE;i<favoritArray.length&&i<((pageNum+1)*Constant.NUMBERS_PER_PAGE);i++){
-				if(favoritArray[i].length()>0)
+		ArrayList<String> fetchedIds=new ArrayList<String>();
+		for(int i = 0; i < mListItems.size();i++){
+			fetchedIds.add(mListItems.get(i).getObjectId());
+		}
+		int j = 0;
+
+		for(int i = 0;i<favoritArray.length&&j<Constant.NUMBERS_PER_PAGE;i++){
+			if(favoritArray[i].length()>0&&!fetchedIds.contains(favoritArray[i])){
 				toFetchList.add(favoritArray[i]);
+				j++;
 			}
 		}
 		setState(LOADING);
-		pageNum++;
 		BmobQuery<Qiushi> query = new BmobQuery<Qiushi>();
 		query.addWhereContainedIn("objectId", toFetchList);
 		query.findObjects(getActivity(), new FindListener<Qiushi>() {
@@ -154,24 +156,27 @@ public class FavoritContentFragment extends BaseFragment{
 			public void onSuccess(List<Qiushi> list) {
 				LogUtils.i(TAG,"find success."+list.size());
 				if(list.size()!=0&&list.get(list.size()-1)!=null){
-					if(mRefreshType==RefreshType.REFRESH){
-						mListItems.clear();
-					}
+					
 					if(list.size()<Constant.NUMBERS_PER_PAGE){
 						LogUtils.i(TAG,"已加载完所有数据~");
 					}
+					
+					if(mRefreshType==RefreshType.REFRESH){
+						mListItems.addAll(0,list);
+					}else{
+						mListItems.addAll(list);
+					}
+					
 					if(MyApplication.getInstance().getCurrentUser()!=null){
 						//从本地获取缓存数据
 //						list = DatabaseUtil.getInstance(mContext).setFav(list);
 					}
-					mListItems.addAll(list);
 					mAdapter.notifyDataSetChanged();;
 					
 					setState(LOADING_COMPLETED);
 					mPullRefreshListView.onRefreshComplete();
 				}else{
 					ActivityUtil.show(getActivity(), "暂无更多数据~");
-					pageNum--;
 					setState(LOADING_COMPLETED);
 					mPullRefreshListView.onRefreshComplete();
 				}
@@ -180,7 +185,6 @@ public class FavoritContentFragment extends BaseFragment{
 			@Override
 			public void onError(int arg0, String arg1) {
 				LogUtils.i(TAG,"find failed."+arg1);
-				pageNum--;
 				setState(LOADING_FAILED);
 				mPullRefreshListView.onRefreshComplete();
 			}
