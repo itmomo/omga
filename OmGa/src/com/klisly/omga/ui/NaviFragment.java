@@ -36,6 +36,7 @@ public class NaviFragment extends Fragment implements OnClickListener {
 
 	private static final int DUANZIFRAGMENT = 0;
 	private static final int NEIHANTUFRAGMENT = 1;
+	private static final int FAVFRAGMENT = 2;
 	private static final int LOGINFRAGMENT = 3;
 	private static final int USERCENTERFRAGMENT = 4;
 	private static final int SETTINGSFRAGMENT = 5;
@@ -50,12 +51,14 @@ public class NaviFragment extends Fragment implements OnClickListener {
 	private TextView navi_login;
 	private TextView navi_duanzi;
 	private TextView navi_neihantu;
+	private TextView navi_fav;
 	private TextView navi_me;
 	private TextView navi_settings;
 	private TextView navi_intro;
 	private TextView navi_about;
 	DuanziContentFragment mDuanzifragment;
 	NeihantuContentFragment mNeihantufragment;
+	FavoritContentFragment mFavoritContentFragment;
 	UserCenterFragment mUserCenterFragment;
 	AboutFragment mAboutFragment;
 	SettingsFragment mSettingsFragment;
@@ -135,6 +138,7 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		navi_login = (TextView) rootView.findViewById(R.id.tv_login);
 		navi_duanzi = (TextView) rootView.findViewById(R.id.tv_navi_duanzi);
 		navi_neihantu = (TextView) rootView.findViewById(R.id.tv_navi_neihantu);
+		navi_fav = (TextView) rootView.findViewById(R.id.tv_navi_fav);
 		navi_settings = (TextView) rootView.findViewById(R.id.tv_navi_settings);
 		navi_me = (TextView) rootView.findViewById(R.id.tv_navi_me);
 		navi_intro = (TextView) rootView.findViewById(R.id.tv_navi_intro);
@@ -147,6 +151,7 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		navi_login.setOnClickListener(this);
 		navi_duanzi.setOnClickListener(this);
 		navi_neihantu.setOnClickListener(this);
+		navi_fav.setOnClickListener(this);
 		navi_me.setOnClickListener(this);
 		navi_settings.setOnClickListener(this);
 		navi_intro.setOnClickListener(this);
@@ -178,6 +183,10 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		case R.id.tv_navi_neihantu:
 			changeButtonState(NEIHANTUFRAGMENT);
 			OnTabSelected(NEIHANTUFRAGMENT);
+			break;
+		case R.id.tv_navi_fav:
+			changeButtonState(FAVFRAGMENT);
+			OnTabSelected(FAVFRAGMENT);
 			break;
 		case R.id.tv_navi_settings://
 			changeButtonState(SETTINGSFRAGMENT);
@@ -211,6 +220,11 @@ public class NaviFragment extends Fragment implements OnClickListener {
 			navi_neihantu.setSelected(true);
 		}else{
 			navi_neihantu.setSelected(false);
+		}
+		if(index == FAVFRAGMENT){
+			navi_fav.setSelected(true);
+		}else{
+			navi_fav.setSelected(false);
 		}
 		if(index == SETTINGSFRAGMENT){
 			navi_settings.setSelected(true);
@@ -260,6 +274,15 @@ public class NaviFragment extends Fragment implements OnClickListener {
 				transaction.add(R.id.center, mNeihantufragment);
 			} else {
 				transaction.show(mNeihantufragment);
+			}
+			break;
+		case FAVFRAGMENT:
+			hideFragments(transaction);
+			if (null == mFavoritContentFragment) {
+				mFavoritContentFragment = new FavoritContentFragment();
+				transaction.add(R.id.center, mFavoritContentFragment);
+			} else {
+				transaction.show(mFavoritContentFragment);
 			}
 			break;
 		case USERCENTERFRAGMENT:
@@ -317,6 +340,10 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		if (mNeihantufragment != null) {
 			transaction.hide(mNeihantufragment);
 		}
+		if (mFavoritContentFragment != null) {
+			transaction.hide(mFavoritContentFragment);
+		}
+		
 		if (mUserCenterFragment != null) {
 			transaction.hide(mUserCenterFragment);
 		}

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navi_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_navi" >
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:gravity="top"
         android:orientation="vertical" >
 
@@ -67,7 +65,7 @@
             android:drawablePadding="8dp"
             android:textColor="#FFFFFF" />
 		<TextView
-            android:id="@+id/tv_navi_collect"
+            android:id="@+id/tv_navi_fav"
             style="@style/navitext"
             android:drawableLeft="@drawable/ic_navi_home"
             android:text="我赞过的"
@@ -104,5 +102,4 @@
             android:textColor="#FFFFFF" />
 
     </LinearLayout>
-
-</RelativeLayout>
+</ScrollView>

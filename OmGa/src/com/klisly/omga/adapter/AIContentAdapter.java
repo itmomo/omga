@@ -43,7 +43,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 	public AIContentAdapter(Context context, List<Qiushi> list) {
 		super(context, list);
 		this.mContext = context;
-		mCurrentUser = BmobUser.getCurrentUser(this.mContext,User.class);
+		mCurrentUser = MyApplication.getInstance().getCurrentUser();
 	}
 	public void refresh() {    
         notifyDataSetChanged();    
@@ -134,9 +134,14 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 					return;
 				}
 				
+				if(mCurrentUser == null){
+					mCurrentUser = MyApplication.getInstance().getCurrentUser();
+				}
+				
 				if((Boolean)viewHolder.love.getTag()){
-					viewHolder.love.setText((entity.getGood()-1)+"");
 					entity.increment("good",-1);
+					entity.setGood(entity.getGood()-1);
+					viewHolder.love.setText((entity.getGood())+"");
 					viewHolder.love.setTextColor(Color.parseColor("#000000"));
 					viewHolder.love.setTag(false);
 					entity.update(mContext,new UpdateListener() {
@@ -165,26 +170,22 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 					});
 					
 				}else{
-					viewHolder.love.setText((entity.getGood()+1)+"");
 					entity.increment("good",1);
+					entity.setGood(entity.getGood()+1);
+					viewHolder.love.setText((entity.getGood())+"");
 					viewHolder.love.setTextColor(Color.parseColor("#D95555"));
 					viewHolder.love.setTag(true);
-		    		viewHolder.love.setText(entity.getGood()+"");
 					entity.update(mContext, new UpdateListener() {
-						
 						@Override
 						public void onSuccess() {
-							
 				    		if(mCurrentUser.getFavorits() == null)
 				    			mCurrentUser.setFavorits("");
 				    		mCurrentUser.setFavorits(mCurrentUser.getFavorits()+entity.getObjectId()+";");
 				    		mCurrentUser.update(mContext,mCurrentUser.getObjectId(), new UpdateListener() {
-								
 								@Override
 								public void onSuccess() {
 									
 								}
-								
 								@Override
 								public void onFailure(int code, String msg) {
 									ActivityUtil.show(mContext,"收藏失败，"+msg);
@@ -256,9 +257,6 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 //		});
 		return convertView;
 	}
-	private String shareDefaultImage="";
-
-
 	public static class ViewHolder{
 		public RelativeLayout header;
 		public ImageView userLogo;
@@ -354,7 +352,6 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 //
 //				@Override
 //				public void onError(int arg0, String arg1) {
-//					// TODO Auto-generated method stub
 //					ActivityUtil.show(mContext, "获取收藏失败。请检查网络~");
 //				}
 //			});

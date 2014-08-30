@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF" >
 
     <TextView
         android:id="@+id/app_name"
@@ -29,44 +29,45 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:text="version 1.0" />
+
     <TextView
-	    android:id="@+id/sign"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/version_name"
-	    android:layout_centerHorizontal="true"
-	    android:layout_marginTop="16dp"
-	    android:text="@string/slogan"
-	    android:textSize="18sp" />
-	
+        android:id="@+id/sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/version_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/slogan"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/designer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sign"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:text="色剂湿:wizardholy"
+        android:textColor="#888888"
+        android:textSize="16sp" />
+
     <TextView
         android:id="@+id/copyright"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/designer"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="24dp"
-        android:text="wizardholy@163.com" 
-        android:textColor="#888888"/>
-    
-	<TextView
+        android:text="wizardholy@163.com"
+        android:textColor="#888888" />
+
+    <TextView
         android:id="@+id/programar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/copyright"
+        android:layout_below="@+id/copyright"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:textSize="16sp"
-        android:text="攻城狮:wizardholy" 
-        android:textColor="#888888"/>
-	<TextView
-        android:id="@+id/designer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/programar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="4dp"
-        android:textSize="16sp"
-        android:text="色剂湿:wizardholy" 
-        android:textColor="#888888"/>
+        android:text="攻城狮:wizardholy"
+        android:textColor="#888888"
+        android:textSize="16sp" />
+
 </RelativeLayout>

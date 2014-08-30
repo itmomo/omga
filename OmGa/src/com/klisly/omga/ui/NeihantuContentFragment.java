@@ -6,18 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobDate;
@@ -32,7 +27,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.adapter.AIContentAdapter;
-import com.klisly.omga.entity.Picqiushi;
 import com.klisly.omga.entity.Qiushi;
 import com.klisly.omga.ui.base.BaseFragment;
 import com.klisly.omga.utils.ActivityUtil;
@@ -150,7 +144,7 @@ public class NeihantuContentFragment extends BaseFragment{
 	
 	public void fetchData(){
 		setState(LOADING);
-		BmobQuery<Picqiushi> query = new BmobQuery<Picqiushi>();
+		BmobQuery<Qiushi> query = new BmobQuery<Qiushi>();
 		query.order("-createdAt");
 //		query.setCachePolicy(CachePolicy.NETWORK_ONLY);
 		query.setLimit(Constant.NUMBERS_PER_PAGE);
@@ -158,12 +152,13 @@ public class NeihantuContentFragment extends BaseFragment{
 		query.addWhereLessThan("createdAt", date);
 		LogUtils.i(TAG,"SIZE:"+Constant.NUMBERS_PER_PAGE*pageNum);
 		query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum++));
+		query.addWhereNotEqualTo("url_image", "");
 		LogUtils.i(TAG,"SIZE:"+Constant.NUMBERS_PER_PAGE*pageNum);
 		query.include("author");
-		query.findObjects(getActivity(), new FindListener<Picqiushi>() {
+		query.findObjects(getActivity(), new FindListener<Qiushi>() {
 			
 			@Override
-			public void onSuccess(List<Picqiushi> list) {
+			public void onSuccess(List<Qiushi> list) {
 				// TODO Auto-generated method stub
 				LogUtils.i(TAG,"find success."+list.size());
 				if(list.size()!=0&&list.get(list.size()-1)!=null){

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -28,17 +29,19 @@ import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.adapter.AIContentAdapter;
 import com.klisly.omga.entity.Qiushi;
+import com.klisly.omga.entity.User;
 import com.klisly.omga.ui.base.BaseFragment;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
 /**
- * 添加段子图页面
+ * 我赞过的
  * @author wizardholy 
  * @email wizardholy@163.com
- * @data 2014年8月22日 下午8:20:52
+ * @data 2014年8月21日 下午9:42:11
  */
-public class DuanziContentFragment extends BaseFragment{
+
+public class FavoritContentFragment extends BaseFragment{
 	
 	private View contentView ;
 	private int pageNum;
@@ -51,14 +54,16 @@ public class DuanziContentFragment extends BaseFragment{
 	
 	private TextView networkTips;
 	private ProgressBar progressbar;
-	private boolean pullFromUser;
+	
+	private ArrayList<String> collectsIds = new ArrayList<String>();
+	private User mCurrentUser;
 	public enum RefreshType{
 		REFRESH,LOAD_MORE
 	}
 	private RefreshType mRefreshType = RefreshType.LOAD_MORE;
 	
 	public static BaseFragment newInstance(int index){
-		BaseFragment fragment = new DuanziContentFragment();
+		BaseFragment fragment = new FavoritContentFragment();
 		Bundle args = new Bundle();
 		args.putInt("page",index);
 		fragment.setArguments(args);
@@ -83,14 +88,13 @@ public class DuanziContentFragment extends BaseFragment{
 		super.onCreate(savedInstanceState);
 		pageNum = 0;
 		lastItemTime = getCurrentTime();
+		
 		LogUtils.i(TAG,"curent time:"+lastItemTime);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		
 		contentView = inflater.inflate(R.layout.fragment_qiangcontent, null);
 		mPullRefreshListView = (PullToRefreshListView)contentView
 				.findViewById(R.id.pull_refresh_list);
@@ -106,9 +110,7 @@ public class DuanziContentFragment extends BaseFragment{
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				mPullRefreshListView.setMode(Mode.BOTH);
-				pullFromUser = true;
 				mRefreshType = RefreshType.REFRESH;
-				pageNum = 0;
 				lastItemTime = getCurrentTime();
 				fetchData();
 			}
@@ -137,31 +139,36 @@ public class DuanziContentFragment extends BaseFragment{
 			fetchData();
 		}
 		mPullRefreshListView.setState(State.RELEASE_TO_REFRESH, true);
+		
 		return contentView;
 	}
 	
 	public void fetchData(){
-			getDuanData();
-	}
-	
-	private void getDuanData() {
+		
+		if(MyApplication.getInstance().getCurrentUser()==null){
+			ActivityUtil.show(mContext, "请先登录。");
+			Intent intent = new Intent();
+			intent.setClass(mContext, UserLoginActivity.class);
+			MyApplication.getInstance().getTopActivity().startActivity(intent);
+			return;
+		}
+		mCurrentUser = MyApplication.getInstance().getCurrentUser();
+		String favorits = (mCurrentUser.getFavorits()==null)?"":mCurrentUser.getFavorits();
+		String[] favoritArray = favorits.split(";");
+		ArrayList<String> toFetchList = new ArrayList<String>();
+		if(mRefreshType == RefreshType.LOAD_MORE){
+			for(int i = pageNum*Constant.NUMBERS_PER_PAGE;i<favoritArray.length&&i<((pageNum+1)*Constant.NUMBERS_PER_PAGE);i++){
+				if(favoritArray[i].length()>0)
+				toFetchList.add(favoritArray[i]);
+			}
+		}
 		setState(LOADING);
+		pageNum++;
 		BmobQuery<Qiushi> query = new BmobQuery<Qiushi>();
-		query.order("-createdAt");
-//		query.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
-		query.setLimit(Constant.NUMBERS_PER_PAGE);
-		BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
-		query.addWhereLessThan("createdAt", date);
-		query.addWhereEqualTo("url_image", "");
-		LogUtils.i(TAG,"SIZE:"+Constant.NUMBERS_PER_PAGE*pageNum);
-		query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum++));
-		LogUtils.i(TAG,"SIZE:"+Constant.NUMBERS_PER_PAGE*pageNum);
-		query.include("author");
+		query.addWhereContainedIn("objectId", toFetchList);
 		query.findObjects(getActivity(), new FindListener<Qiushi>() {
-			
 			@Override
 			public void onSuccess(List<Qiushi> list) {
-				// TODO Auto-generated method stub
 				LogUtils.i(TAG,"find success."+list.size());
 				if(list.size()!=0&&list.get(list.size()-1)!=null){
 					if(mRefreshType==RefreshType.REFRESH){
@@ -175,7 +182,7 @@ public class DuanziContentFragment extends BaseFragment{
 //						list = DatabaseUtil.getInstance(mContext).setFav(list);
 					}
 					mListItems.addAll(list);
-					mAdapter.notifyDataSetChanged();
+					mAdapter.notifyDataSetChanged();;
 					
 					setState(LOADING_COMPLETED);
 					mPullRefreshListView.onRefreshComplete();
@@ -196,9 +203,8 @@ public class DuanziContentFragment extends BaseFragment{
 				mPullRefreshListView.onRefreshComplete();
 			}
 		});
-		
 	}
-
+	
 	private static final int LOADING = 1;
 	private static final int LOADING_COMPLETED = 2;
 	private static final int LOADING_FAILED =3;
@@ -219,7 +225,6 @@ public class DuanziContentFragment extends BaseFragment{
 			
 		    mPullRefreshListView.setVisibility(View.VISIBLE);
 		    mPullRefreshListView.setMode(Mode.BOTH);
-
 			
 			break;
 		case LOADING_FAILED:
