@@ -25,6 +25,16 @@
 			   android:focusableInTouchMode="true"
                >
                <com.klisly.omga.view.DeletableEditText 
+                   android:id="@+id/et_email" 
+                   android:layout_marginTop="10.0dip" 
+                   android:hint="邮箱" 
+                   android:singleLine="true" 
+                   android:drawableLeft="@drawable/user_name"
+   				   android:drawableRight="@drawable/user_delete"
+			       android:inputType="textEmailAddress"
+                   style="@style/EditText"
+                   />
+               <com.klisly.omga.view.DeletableEditText 
                    android:id="@+id/et_userName" 
                    android:hint="用户名" 
                    android:drawableLeft="@drawable/user_account"
@@ -38,18 +48,10 @@
                    android:hint="密码" 
                    android:singleLine="true" 
                    android:drawableLeft="@drawable/user_password"
-   				android:drawableRight="@drawable/user_delete"
+   				   android:drawableRight="@drawable/user_delete"
                    style="@style/EditText"
                    />
-               <com.klisly.omga.view.DeletableEditText 
-                   android:id="@+id/et_email" 
-                   android:layout_marginTop="10.0dip" 
-                   android:hint="邮箱" 
-                   android:singleLine="true" 
-                   android:drawableLeft="@drawable/user_name"
-   					android:drawableRight="@drawable/user_delete"
-                   style="@style/EditText"
-                   />
+               
            </LinearLayout>
 	    <Button 
 	        android:id="@+id/btn_register" 

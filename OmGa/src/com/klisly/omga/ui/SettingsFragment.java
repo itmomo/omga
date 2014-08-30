@@ -157,7 +157,7 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 		case R.id.user_logout:
 			if(isLogined()){
 				BmobUser.logOut(mContext);
-				ActivityUtil.show(getActivity(), "登出成功。");
+				setupViews(getArguments());
 			}else{
 				redictToLogin(GO_LOGIN);
 			}
@@ -169,7 +169,6 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 		Intent intent = new Intent();
 		intent.setClass(getActivity(), UserLoginActivity.class);
 		startActivityForResult(intent, requestCode);
-		ActivityUtil.show(mContext, "请先登录。");
 	}
 	String dateTime;
 	AlertDialog albumDialog;

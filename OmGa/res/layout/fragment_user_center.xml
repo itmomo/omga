@@ -28,7 +28,7 @@
 	            android:layout_marginLeft="10dp"
 	            android:layout_toRightOf="@+id/iv_user_avatar"
 	            style="@style/TextTheme.tipstheme_buttontext"
-	            android:text="了然月夜雨" />
+	            android:text="未设置" />
 	
 	         <TextView
 	             android:id="@+id/tv_user_signature"
@@ -80,7 +80,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="男"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -110,7 +110,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="1989-10-28"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -140,7 +140,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="吃饭，睡觉，打豆豆。。。。"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -150,8 +150,8 @@
 		    android:layout_height="1dp"
 		    android:background="@color/g_divider"
 		    />
-		<RelativeLayout
-		    android:id="@+id/rl_btn_very_email" 
+		<LinearLayout
+		    android:id="@+id/rl_btn_verify_email" 
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:padding="8dp"
@@ -163,18 +163,33 @@
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme"
 	            android:text="注册邮箱"
-	            android:layout_centerVertical="true"
+	            android:layout_weight="0"
 	            />
+		    <View 
+			    android:layout_width="0dp"
+			    android:layout_height="match_parent"
+			    android:layout_weight="1"
+		    />
+		    
 		    <TextView 
 	            android:id="@+id/tv_user_email"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="wizardholy@163.com"
-	            android:layout_centerVertical="true"
-	            android:layout_alignParentRight="true"
+	            android:layout_weight="0"
+	            android:text="未设置"
 	            />
-		</RelativeLayout>
+		    
+		     <TextView 
+	            android:id="@+id/tv_user_email_verify_tip"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            style="@style/TextTheme.tipstheme_second"
+	            android:text="(未验证)"
+	            android:layout_weight="0"
+	            />
+		     
+		</LinearLayout>
 		<View 
 		    android:layout_width="match_parent"
 		    android:layout_height="1dp"
@@ -199,7 +214,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="2014-08-11"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />

@@ -8,7 +8,7 @@ public class EditNameActivity extends BaseHomeActivity{
 	@Override
 	protected String getActionBarTitle() {
 		// TODO Auto-generated method stub
-		return "编辑名字";
+		return "编辑昵称";
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import com.klisly.omga.proxy.UserProxy.ILoginListener;
 import com.klisly.omga.ui.base.BasePageActivity;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.LogUtils;
+import com.klisly.omga.utils.StringUtils;
 import com.klisly.omga.view.DeletableEditText;
 import com.markupartist.android.widget.ActionBar;
 import com.markupartist.android.widget.ActionBar.Action;
@@ -40,48 +41,43 @@ public class UserLoginActivity extends BasePageActivity
 	private Button mBtnLogin;
 	private TextView mTvBtnForget;
 	private TextView mTvBtnRegister;
-	private DeletableEditText mEtUserName;
+	private DeletableEditText mEtUserEmail;
 	private DeletableEditText mEtPassword;
-//	private UMSocialService mController;
 	Button registerButton;
 	UserProxy userProxy;
-	
+	private static final int USER_REGISTER_CODE=0;
+	private static final int USER_FINDPASSWD_CODE=1;
 	@Override
 	protected void setLayoutView() {
-//		mController = UMServiceFactory.getUMSocialService("com.klisly.omga.ui.UserLoginActivity");
 		setContentView(R.layout.activity_login);
 	}
 
 	@Override
 	protected void findViews() {
-		// TODO Auto-generated method stub
 		actionbar = (ActionBar)findViewById(R.id.actionbar_login);
 		mRlSinaLogin = (RelativeLayout) findViewById(R.id.rl_btn_sina_login);
 		mRlQQLogin = (RelativeLayout) findViewById(R.id.rl_btn_qq_login);
 		mBtnLogin = (Button) findViewById(R.id.btn_login);
 		mTvBtnForget = (TextView) findViewById(R.id.tv_btn_forget);
 		mTvBtnRegister = (TextView) findViewById(R.id.tv_btn_register);
-		mEtUserName = (DeletableEditText)findViewById(R.id.et_userName);
+		mEtUserEmail = (DeletableEditText)findViewById(R.id.et_userName);
 		mEtPassword = (DeletableEditText)findViewById(R.id.et_passwd);
 		
 	}
 
 	@Override
 	protected void setupViews(Bundle bundle) {
-		// TODO Auto-generated method stub
 		 actionbar.setTitle(mContext.getResources().getString(R.string.login_caption));
 		 actionbar.setDisplayHomeAsUpEnabled(true);
 		 actionbar.setHomeAction(new Action() {
 			
 			@Override
 			public void performAction(View view) {
-				// TODO Auto-generated method stub
 				finish();
 			}
 			
 			@Override
 			public int getDrawable() {
-				// TODO Auto-generated method stub
 				return R.drawable.logo;
 			}
 		});
@@ -99,7 +95,6 @@ public class UserLoginActivity extends BasePageActivity
 
 	@Override
 	protected void fetchData() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -133,9 +128,14 @@ public class UserLoginActivity extends BasePageActivity
 				});
 				break;
 			case R.id.btn_login:
-				if(TextUtils.isEmpty(mEtUserName.getText().toString().trim())){
-					mEtUserName.setShakeAnimation();
-					Toast.makeText(mContext, "请输入用户名", Toast.LENGTH_SHORT).show();
+				if(TextUtils.isEmpty(mEtUserEmail.getText().toString().trim())){
+					mEtUserEmail.setShakeAnimation();
+					Toast.makeText(mContext, "请输入邮箱地址", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				if(!StringUtils.isValidEmail(mEtUserEmail.getText())){
+					mEtUserEmail.setShakeAnimation();
+					Toast.makeText(mContext, "邮箱格式不正确", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				if(TextUtils.isEmpty(mEtPassword.getText().toString().trim())){
@@ -143,29 +143,25 @@ public class UserLoginActivity extends BasePageActivity
 					Toast.makeText(mContext, "请输入密码", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				
 				userProxy.setOnLoginListener(this);
 				LogUtils.i(TAG,"login begin....");
-				userProxy.login(mEtUserName.getText().toString().trim(),ActivityUtil.Md5(mEtPassword.getText().toString().trim()));
+				userProxy.login(mEtUserEmail.getText().toString().trim(),ActivityUtil.Md5(mEtPassword.getText().toString().trim()));
 				break;
 			case R.id.tv_btn_forget:
 				intent = new Intent();
 				intent.setClass(this.mContext, UserForgetActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, USER_FINDPASSWD_CODE);
 				break;
 			case R.id.tv_btn_register:
 				intent = new Intent();
 				intent.setClass(this.mContext, UserRegisterActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, USER_REGISTER_CODE);
 				break;
 		}
 	}
 
 	@Override
 	public void onLoginSuccess() {
-		// TODO Auto-generated method stub
-		ActivityUtil.show(this,this.getResources().getString(R.string.login_success_tip));
-		
 		LogUtils.i(TAG,"login sucessed!");
 		setResult(RESULT_OK);
 		finish();
@@ -173,9 +169,21 @@ public class UserLoginActivity extends BasePageActivity
 
 	@Override
 	public void onLoginFailure(String msg) {
-		// TODO Auto-generated method stub
 		ActivityUtil.show(this, msg);
-		LogUtils.i(TAG,"login failed!"+msg);
+		LogUtils.i(TAG,"登录失败!"+msg);
 	}
-
+	
+	@Override
+	protected void onActivityResult(int requestCode , int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		if(resultCode == RESULT_OK){
+			switch (requestCode) {
+			case USER_REGISTER_CODE:
+				onLoginSuccess();
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }

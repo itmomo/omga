@@ -12,6 +12,7 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,11 +25,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.EmailVerifyListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -57,8 +60,9 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 	private TextView mTvBirthYear;
 	private RelativeLayout mRlBtnChangeInterest;
 	private TextView mTvInterest;
-	private RelativeLayout mRlBtnVerifyEmail;
+	private LinearLayout mRlBtnVerifyEmail;
 	private TextView mTvEmail;
+	private TextView mTvEmailVerifyTip;
 	private TextView mTvRegisterDate;
 	private TextView mTvUsedPhone;
 	public static final int USER_LOGIN=9;
@@ -68,7 +72,7 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 	public static final int UPDATE_INTEREST = 13;
 	public static final int UPDATE_SIGN = 14;
 	public static int action=UPDATE_AVATAR;
-	
+	User user;
 	@Override
 	protected int getLayoutId() {
 		return R.layout.fragment_user_center;
@@ -85,8 +89,9 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 		mTvGender = (TextView)view.findViewById(R.id.tv_user_gender);
 		mRlBtnChangeInterest = (RelativeLayout) view.findViewById(R.id.rl_btn_change_interest);
 		mTvInterest = (TextView)view.findViewById(R.id.tv_user_interest);
-		mRlBtnVerifyEmail = (RelativeLayout) view.findViewById(R.id.rl_btn_very_email);
+		mRlBtnVerifyEmail = (LinearLayout) view.findViewById(R.id.rl_btn_verify_email);
 		mTvEmail = (TextView)view.findViewById(R.id.tv_user_email);
+		mTvEmailVerifyTip = (TextView)view.findViewById(R.id.tv_user_email_verify_tip);
 		mTvRegisterDate = (TextView)view.findViewById(R.id.tv_user_register);
 		mTvUsedPhone = (TextView)view.findViewById(R.id.tv_user_phone);
 	}
@@ -96,11 +101,13 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 		initPersonalInfo();
 	}
 
-	private void initPersonalInfo(){
-		User user = BmobUser.getCurrentUser(mContext,User.class);
+	public void initPersonalInfo(){
+		user = BmobUser.getCurrentUser(mContext,User.class);
 		if(user != null){
 			LogUtils.i(TAG, user.toString());
-			mTvUserNickName.setText(user.getUsername());
+			if(user.getNickname()==null)
+				user.setNickname(user.getUsername());
+			mTvUserNickName.setText(user.getNickname());
 			if(user.getSignature()!=null)
 				mTvSignature.setText(user.getSignature());
 			if(user.getGender()!=null){
@@ -124,7 +131,6 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 							@Override
 							public void onLoadingComplete(String imageUri, View view,
 									Bitmap loadedImage) {
-								// TODO Auto-generated method stub
 								super.onLoadingComplete(imageUri, view, loadedImage);
 							}
 					
@@ -140,10 +146,15 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 			}else{
 				mTvEmail.setVisibility(View.GONE);
 			}
+			System.out.println(user.getEmailVerified());
+			if(user!=null&&user.getEmail()!=null && user.getEmailVerified()!=null&&user.getEmailVerified()){
+				mTvEmailVerifyTip.setVisibility(View.GONE);
+			}else{
+				mTvEmailVerifyTip.setVisibility(View.VISIBLE);
+			}
+			
 			if(user.getPhoneserial()!=null)
 			mTvUsedPhone.setText(user.getPhoneserial());
-		}else{
-			
 		}
 	}
 	
@@ -178,7 +189,8 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 		mRlBtnChangeBirthDate.setOnClickListener(this);
 		mRlBtnChangeGenger.setOnClickListener(this);
 		mRlBtnChangeInterest.setOnClickListener(this);
-		mRlBtnVerifyEmail.setOnClickListener(this);
+		if(user!=null&&(user.getEmailVerified()==null || !user.getEmailVerified()))
+			mRlBtnVerifyEmail.setOnClickListener(this);
 	}
 
 	@Override
@@ -207,6 +219,9 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 			intent.setClass(mContext, EditSignActivity.class);
 			startActivityForResult(intent, UPDATE_SIGN);
 			break;
+		case R.id.rl_btn_verify_email:
+			showEmailVerfyDialog();
+			break;
 		case R.id.rl_btn_change_gender:
 			editGenderDialog();
 			break;
@@ -221,6 +236,38 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 		default:
 			break;
 		}
+	}
+	private void showEmailVerfyDialog() {
+		AlertDialog.Builder builder = new Builder(getActivity());
+	    builder.setMessage("确认发送验证邮件吗？");
+	    builder.setTitle("提示");
+	    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(final DialogInterface dialog, int which) {
+				BmobUser.requestEmailVerify(getActivity(), user.getEmail(), new EmailVerifyListener() {
+				    @Override
+				    public void onSuccess() {
+				        ActivityUtil.show(getActivity(), "邮件发送成功,请到邮箱中进行激活。");
+				        dialog.dismiss();
+				    }
+				    @Override
+				    public void onFailure(int code, String e) {
+				    	 ActivityUtil.show(getActivity(), "请求验证邮件失败:" + e);
+				    	 LogUtils.e(TAG, "请求验证邮件失败:"+code+":" + e);
+				    }
+				});
+				
+			}
+		});
+	    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+	    builder.create().show();
 	}
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	WheelMain wheelMain;
@@ -295,7 +342,6 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				albumDialog.dismiss();
 				Date date = new Date(System.currentTimeMillis());
 				dateTime = date.getTime() + "";
@@ -367,30 +413,7 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 		intent2.setType("image/*");
 		startActivityForResult(intent2, 2);
 	}
-	private void updateUser(String content){
-		User user = BmobUser.getCurrentUser(mContext, User.class);
-		if(user != null && content != null){
-			if(action == UPDATE_USERNAME){
-				user.setUsername(content);
-			}
-			user.update(mContext, new UpdateListener() {
-				
-				@Override
-				public void onSuccess() {
-					// TODO Auto-generated method stub
-					ActivityUtil.show(getActivity(), "更改信息成功。");
-					getActivity().setResult(Activity.RESULT_OK);
-					getActivity().finish();
-				}
-				
-				@Override
-				public void onFailure(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					ActivityUtil.show(getActivity(), "更改信息失败。请检查网络");
-				}
-			});
-		}
-	}
+	
 	private void updateBirthDate(Date birthDate){
 		User user = BmobUser.getCurrentUser(mContext, User.class);
 		if(user!=null){
@@ -446,7 +469,6 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 	String iconUrl;
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == Activity.RESULT_OK){
 			switch (requestCode) {
@@ -477,7 +499,7 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 					Bundle extras = data.getExtras();
 					if (extras != null) {
 						Bitmap bitmap = extras.getParcelable("data");
-						// 锟斤拷锟斤拷图片
+						// 设置头像
 						iconUrl = saveToSdCard(bitmap);
 						mIvUserAvatar.setImageBitmap(bitmap);
 						updateIcon(iconUrl);
@@ -497,7 +519,6 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 				
 				@Override
 				public void onSuccess() {
-					// TODO Auto-generated method stub
 					LogUtils.i(TAG, "上传文件成功。"+file.getFileUrl());
 					User currentUser = BmobUser.getCurrentUser(mContext, User.class);
 					currentUser.setAvatar(file);
@@ -519,7 +540,6 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 
 				@Override
 				public void onProgress(Integer arg0) {
-					// TODO Auto-generated method stub
 					
 				}
 
@@ -563,10 +583,8 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
                 out.close();
             }
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         LogUtils.i(TAG, file.getAbsolutePath());
