@@ -73,13 +73,11 @@ public class DuanziContentFragment extends BaseFragment{
 	
 	@Override
 	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
 		super.onAttach(activity);
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		pageNum = 0;
 		lastItemTime = getCurrentTime();
@@ -89,8 +87,6 @@ public class DuanziContentFragment extends BaseFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		
 		contentView = inflater.inflate(R.layout.fragment_qiangcontent, null);
 		mPullRefreshListView = (PullToRefreshListView)contentView
 				.findViewById(R.id.pull_refresh_list);
@@ -101,7 +97,6 @@ public class DuanziContentFragment extends BaseFragment{
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -115,7 +110,6 @@ public class DuanziContentFragment extends BaseFragment{
 
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				mRefreshType = RefreshType.LOAD_MORE;
 				fetchData();
 			}
@@ -124,8 +118,6 @@ public class DuanziContentFragment extends BaseFragment{
 
 			@Override
 			public void onLastItemVisible() {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -161,7 +153,6 @@ public class DuanziContentFragment extends BaseFragment{
 			
 			@Override
 			public void onSuccess(List<Qiushi> list) {
-				// TODO Auto-generated method stub
 				LogUtils.i(TAG,"find success."+list.size());
 				if(list.size()!=0&&list.get(list.size()-1)!=null){
 					if(mRefreshType==RefreshType.REFRESH){
@@ -188,9 +179,9 @@ public class DuanziContentFragment extends BaseFragment{
 			}
 
 			@Override
-			public void onError(int arg0, String arg1) {
+			public void onError(int code, String msg) {
 				// TODO Auto-generated method stub
-				LogUtils.i(TAG,"find failed."+arg1);
+				LogUtils.i(TAG,"find failed."+msg);
 				pageNum--;
 				setState(LOADING_FAILED);
 				mPullRefreshListView.onRefreshComplete();

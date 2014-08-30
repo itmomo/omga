@@ -1,8 +1,6 @@
 package com.klisly.omga.ui;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,7 +14,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.listener.FindListener;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -55,7 +52,6 @@ public class FavoritContentFragment extends BaseFragment{
 	private TextView networkTips;
 	private ProgressBar progressbar;
 	
-	private ArrayList<String> collectsIds = new ArrayList<String>();
 	private User mCurrentUser;
 	public enum RefreshType{
 		REFRESH,LOAD_MORE
@@ -70,24 +66,15 @@ public class FavoritContentFragment extends BaseFragment{
 		return fragment;
 	}
 	
-	private String getCurrentTime(){
-		 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	     String times = formatter.format(new Date(System.currentTimeMillis()));
-	     return times;
-	}
-	
 	@Override
 	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
 		super.onAttach(activity);
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		pageNum = 0;
-		lastItemTime = getCurrentTime();
 		
 		LogUtils.i(TAG,"curent time:"+lastItemTime);
 	}
@@ -105,19 +92,16 @@ public class FavoritContentFragment extends BaseFragment{
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				mPullRefreshListView.setMode(Mode.BOTH);
 				mRefreshType = RefreshType.REFRESH;
-				lastItemTime = getCurrentTime();
 				fetchData();
 			}
 
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				mRefreshType = RefreshType.LOAD_MORE;
 				fetchData();
 			}
@@ -126,7 +110,6 @@ public class FavoritContentFragment extends BaseFragment{
 
 			@Override
 			public void onLastItemVisible() {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -196,7 +179,6 @@ public class FavoritContentFragment extends BaseFragment{
 
 			@Override
 			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
 				LogUtils.i(TAG,"find failed."+arg1);
 				pageNum--;
 				setState(LOADING_FAILED);

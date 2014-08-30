@@ -57,7 +57,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 		// .setAutoCloseSpot(true);// 设置自动关闭插屏开关
 		// SpotManager.getInstance(this)
 		// .setCloseTime(6000); // 设置关闭插屏时间
-
 	}
 
 	private void initFragment() {
@@ -74,11 +73,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 		mSlidingMenu.setFadeDegree(0.5f);
 		mSlidingMenu.setMenu(R.layout.frame_navi);
 
-		Bundle mBundle = null;
 		// 导航打开监听事件
 		mSlidingMenu.setOnOpenListener(new OnOpenListener() {
 			@Override
 			public void onOpen() {
+				naviFragment.initUserInfo();
 			}
 		});
 		// 导航关闭监听事件
@@ -86,6 +85,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 			@Override
 			public void onClosed() {
+				naviFragment.initUserInfo();
 			}
 		});
 		// 加载广告
@@ -162,7 +162,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 						}); // //
 				show = true;
-			} else {
+			} else if(SpotManager.getInstance(MainActivity.this).checkLoadComplete()) {
 				SpotManager.getInstance(MainActivity.this).disMiss(true);
 				MyApplication.getInstance().exit();
 				super.onBackPressed();

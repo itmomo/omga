@@ -12,7 +12,7 @@
         android:id="@+id/sign_comment_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="来说两句吧..."
+        android:hint="给自己取个响亮的名字吧"
         android:background="@drawable/selector_edittext_account"
         android:ems="10" 
         android:maxLength="45"

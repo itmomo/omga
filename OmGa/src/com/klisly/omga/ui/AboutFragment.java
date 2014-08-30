@@ -17,26 +17,22 @@ public class AboutFragment extends BaseHomeFragment{
 	
 	@Override
 	protected int getLayoutId() {
-		// TODO Auto-generated method stub
 		return R.layout.fragment_about;
 	}
 
 	@Override
 	protected void findViews(View view) {
-		// TODO Auto-generated method stub
 		versionName = (TextView)view.findViewById(R.id.version_name);
 		
 	}
 
 	@Override
 	protected void setupViews(Bundle bundle) {
-		// TODO Auto-generated method stub
 		versionName.setText(ActivityUtil.getVersionName(mContext));
 	}
 
 	@Override
 	protected void setListener() {
-		// TODO Auto-generated method stub
 		
 	}
 

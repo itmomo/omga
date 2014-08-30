@@ -41,7 +41,7 @@ public class EditNameFragment extends BaseHomeFragment{
 	@Override
 	protected void setupViews(Bundle bundle) {
 		User user = BmobUser.getCurrentUser(getActivity(),User.class);
-		input.setText(user.getUsername());
+		input.setText(user.getNickname());
 		
 	}
 
@@ -54,7 +54,7 @@ public class EditNameFragment extends BaseHomeFragment{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(TextUtils.isEmpty(input.getText().toString().trim())){
-					ActivityUtil.show(getActivity(), "请先输入。。。");
+					ActivityUtil.show(getActivity(), "请先输入你的名字");
 				}else{
 					updateUserName(input.getText().toString().trim());
 				}
@@ -64,14 +64,13 @@ public class EditNameFragment extends BaseHomeFragment{
 
 	@Override
 	protected void fetchData() {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	private void updateUserName(String username){
 		User user = BmobUser.getCurrentUser(mContext, User.class);
 		if(user != null && username != null){
-			user.setUsername(username);
+			user.setNickname(username);
 			user.update(mContext, new UpdateListener() {
 				
 				@Override

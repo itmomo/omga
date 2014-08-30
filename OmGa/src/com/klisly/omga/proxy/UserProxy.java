@@ -1,6 +1,9 @@
 package com.klisly.omga.proxy;
 
+import java.util.Date;
+
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.listener.ResetPasswordListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -24,13 +27,18 @@ public class UserProxy {
 	
 	public void signUp(String userName,String password,String email){
 		User user = new User();
-		user.setUsername(userName);
+		user.setUsername(email);
+		user.setNickname(userName);
+		user.setAvatar(null);
 		user.setPassword(password);
 		user.setEmail(email);
-		user.setGender(Constant.SEX_FEMALE);
+		user.setBirthdate(new BmobDate(new Date(System.currentTimeMillis())));
+		user.setGender(Constant.SEX_SECRET);
 		user.setSignature("这个家伙很懒，什么也不说。。。");
+		user.setInterest(" 吃饭，睡觉，打豆豆");
+		user.setFavorits("");
+		user.setPhoneserial("未知");
 		user.signUp(mContext, new SaveListener() {
-			
 			@Override
 			public void onSuccess() {
 				// TODO Auto-generated method stub
@@ -45,6 +53,7 @@ public class UserProxy {
 			public void onFailure(int code, String msg) {
 				
 				if(signUpLister != null){
+					LogUtils.e(TAG, "sign up failed:"+code+":"+msg);
 					String message = mContext.getResources().getString(R.string.network_tip);
 					if(code == Constant.BMOB_CODE_NETWORK_ERROR){
 						message = mContext.getResources().getString(R.string.network_tip);
@@ -89,9 +98,10 @@ public class UserProxy {
 		return null;
 	}
 	
-	public void login(String userName,String password){
+	public void login(String userEmail,String password){
 		final BmobUser user = new BmobUser();
-		user.setUsername(userName);
+		user.setUsername(userEmail);
+		user.setEmail(userEmail);;
 		user.setPassword(password);
 		user.login(mContext, new SaveListener() {
 			

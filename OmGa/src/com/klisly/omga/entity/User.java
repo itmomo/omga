@@ -16,9 +16,11 @@ import com.klisly.omga.utils.LogUtils;
  */
 public class User extends BmobUser{
 
+	private static final long serialVersionUID = -2680830980440856655L;
 	public static final String TAG = "User";
 	private String signature;
 	private BmobFile avatar;
+	private String nickname;
 	private String gender;
 	private BmobDate birthdate;
 	private String interest;
@@ -62,8 +64,12 @@ public class User extends BmobUser{
 	public void setPhoneserial(String phoneserial) {
 		this.phoneserial = phoneserial;
 	}
-	
-	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	public String getFavorits() {
 		return favorits;
 	}

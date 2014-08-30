@@ -91,6 +91,16 @@ public class UserRegisterActivity extends BasePageActivity
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 			case R.id.btn_register:
+				if(TextUtils.isEmpty(mEtEmail.getText().toString().trim())){
+					mEtEmail.setShakeAnimation();
+					Toast.makeText(mContext, "请输入邮箱地址", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				if(!StringUtils.isValidEmail(mEtEmail.getText())){
+					mEtEmail.setShakeAnimation();
+					Toast.makeText(mContext, "邮箱格式不正确", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				
 				if(TextUtils.isEmpty(mEtUserName.getText().toString().trim())){
 					mEtUserName.setShakeAnimation();
@@ -100,16 +110,6 @@ public class UserRegisterActivity extends BasePageActivity
 				if(TextUtils.isEmpty(mEtPassword.getText().toString().trim())){
 					mEtPassword.setShakeAnimation();
 					Toast.makeText(mContext, "请输入密码", Toast.LENGTH_SHORT).show();
-					return;
-				}
-				if(TextUtils.isEmpty(mEtEmail.getText().toString().trim())){
-					mEtEmail.setShakeAnimation();
-					Toast.makeText(mContext, "请输入邮箱地址", Toast.LENGTH_SHORT).show();
-					return;
-				}
-				if(!StringUtils.isValidEmail(mEtEmail.getText())){
-					mEtEmail.setShakeAnimation();
-					Toast.makeText(mContext, "邮箱格式不正确", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				
@@ -124,17 +124,15 @@ public class UserRegisterActivity extends BasePageActivity
 
 	@Override
 	public void onSignUpSuccess() {
-		// TODO Auto-generated method stub
 		ActivityUtil.show(this, "注册成功");
-		LogUtils.i(TAG,"register successed！");
+		setResult(RESULT_OK);
 		this.finish();
 	}
 
 	@Override
 	public void onSignUpFailure(String msg) {
-		// TODO Auto-generated method stub
 		ActivityUtil.show(this, msg);
-		LogUtils.i(TAG,"register failed！");
+		LogUtils.i(TAG," ！");
 	}
 
 

@@ -96,11 +96,13 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 		initPersonalInfo();
 	}
 
-	private void initPersonalInfo(){
+	public void initPersonalInfo(){
 		User user = BmobUser.getCurrentUser(mContext,User.class);
 		if(user != null){
 			LogUtils.i(TAG, user.toString());
-			mTvUserNickName.setText(user.getUsername());
+			if(user.getNickname()==null)
+				user.setNickname(user.getUsername());
+			mTvUserNickName.setText(user.getNickname());
 			if(user.getSignature()!=null)
 				mTvSignature.setText(user.getSignature());
 			if(user.getGender()!=null){
@@ -142,8 +144,6 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 			}
 			if(user.getPhoneserial()!=null)
 			mTvUsedPhone.setText(user.getPhoneserial());
-		}else{
-			
 		}
 	}
 	

@@ -18,10 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.sharesdk.framework.m;
 
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.entity.User;
+import com.klisly.omga.utils.ActivityUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
@@ -70,7 +72,7 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		super.onCreate(savedInstanceState);
 	}
 
-	private View rootView;// 缓存Fragment view
+	private View rootView;
 
 	/**
 	 * 显示左边导航栏fragment
@@ -94,14 +96,14 @@ public class NaviFragment extends Fragment implements OnClickListener {
 	/**
 	 * 初始化用户模块
 	 */
-	private void initUserInfo() {
+	public void initUserInfo() {
 		currentUser =  BmobUser.getCurrentUser(this.getActivity(),User.class);
 		if (currentUser != null) {
 			// 允许用户使用应用,即有了用户的唯一标识符，可以作为发布内容的字段
 			mLlBtnUserInfo.setVisibility(View.VISIBLE);
 			mLlUserOperator.setVisibility(View.GONE);
 			BmobFile bmobFile = currentUser.getAvatar();
-			mTvUserName.setText(currentUser.getUsername());
+			mTvUserName.setText(currentUser.getNickname()==null?currentUser.getUpdatedAt():currentUser.getNickname());
 			ImageLoader.getInstance()
 			.displayImage(bmobFile == null ?"":bmobFile.getFileUrl(), mIvAvatar, 
 					MyApplication.getInstance().getOptions(R.drawable.user_icon_default_main),
@@ -253,7 +255,6 @@ public class NaviFragment extends Fragment implements OnClickListener {
 		Intent intent = null;
 		switch (index) {
 		case LOGINFRAGMENT:
-			// 缓存用户对象为空时， 可打开用户注册界面…
 			intent = new Intent();
 			intent.setClass(mActivity, UserLoginActivity.class);
 			startActivity(intent);
@@ -277,12 +278,19 @@ public class NaviFragment extends Fragment implements OnClickListener {
 			}
 			break;
 		case FAVFRAGMENT:
-			hideFragments(transaction);
-			if (null == mFavoritContentFragment) {
-				mFavoritContentFragment = new FavoritContentFragment();
-				transaction.add(R.id.center, mFavoritContentFragment);
+			if (currentUser != null) {
+				hideFragments(transaction);
+				if (null == mFavoritContentFragment) {
+					mFavoritContentFragment = new FavoritContentFragment();
+					transaction.add(R.id.center, mFavoritContentFragment);
+				} else {
+					transaction.show(mFavoritContentFragment);
+				}
 			} else {
-				transaction.show(mFavoritContentFragment);
+				ActivityUtil.show(getActivity(), "登录后才能查看");
+				intent = new Intent();
+				intent.setClass(mActivity, UserLoginActivity.class);
+				startActivity(intent);
 			}
 			break;
 		case USERCENTERFRAGMENT:
@@ -293,10 +301,10 @@ public class NaviFragment extends Fragment implements OnClickListener {
 					transaction.add(R.id.center, mUserCenterFragment);
 				} else {
 					transaction.show(mUserCenterFragment);
+					mUserCenterFragment.initPersonalInfo();
 				}
 			} else {
-				// 缓存用户对象为空时， 可打开用户注册界面…
-				Toast.makeText(mActivity, "请先登录", Toast.LENGTH_SHORT).show();
+				ActivityUtil.show(getActivity(), "登录后才能进入个人中心");
 				intent = new Intent();
 				intent.setClass(mActivity, UserLoginActivity.class);
 				startActivity(intent);
@@ -310,6 +318,7 @@ public class NaviFragment extends Fragment implements OnClickListener {
 			} else {
 				transaction.show(mSettingsFragment);
 			}
+			
 			break;
 		case INTROFRAGMENT:
 			DiyManager.showRecommendWall(getActivity());

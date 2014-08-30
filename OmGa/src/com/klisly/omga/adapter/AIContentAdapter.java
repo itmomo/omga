@@ -127,7 +127,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 			@Override
 			public void onClick(View v) {
 				if(MyApplication.getInstance().getCurrentUser()==null){
-					ActivityUtil.show(mContext, "请先登录。");
+					ActivityUtil.show(mContext, "登陆后才能点赞");
 					Intent intent = new Intent();
 					intent.setClass(mContext, UserLoginActivity.class);
 					MyApplication.getInstance().getTopActivity().startActivity(intent);
@@ -239,22 +239,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		        oks.show( mContext);
 			}
 		});
-//		if(entity.getMyFav()){
-//			viewHolder.favMark.setImageResource(R.drawable.ic_action_fav_choose);
-//		}else{
-//			viewHolder.favMark.setImageResource(R.drawable.ic_action_fav_normal);
-//		}
-//		viewHolder.favMark.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				//收藏
-//				ActivityUtil.show(mContext, "收藏");
-//				onClickFav(v,entity);
-//				
-//			}
-//		});
+
 		return convertView;
 	}
 	public static class ViewHolder{
@@ -267,100 +252,5 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		public TextView share;
 	}
 	
-//	private void onClickFav(View v,final Qiushi qiushi) {
-//		// TODO Auto-generated method stub
-//		User user = BmobUser.getCurrentUser(mContext, User.class);
-//		if(user != null && user.getSessionToken()!=null){
-//			BmobRelation favRelaton = new BmobRelation();
-//			
-//			qiushi.setMyFav(!qiushi.getMyFav());
-//			if(qiushi.getMyFav()){
-//				((ImageView)v).setImageResource(R.drawable.ic_action_fav_choose);
-//				favRelaton.add(qiushi);
-//				user.setFavorite(favRelaton);
-//				ActivityUtil.show(mContext, "收藏成功。");
-//				user.update(mContext, new UpdateListener() {
-//					
-//					@Override
-//					public void onSuccess() {
-//						// TODO Auto-generated method stub
-//						DatabaseUtil.getInstance(mContext).insertFav(qiangYu);
-//						LogUtils.i(TAG, "收藏成功。");
-//						//try get fav to see if fav success
-////						getMyFavourite();
-//					}
-//
-//					@Override
-//					public void onFailure(int arg0, String arg1) {
-//						// TODO Auto-generated method stub
-//						LogUtils.i(TAG, "收藏失败。请检查网络~");
-//						ActivityUtil.show(mContext, "收藏失败。请检查网络~"+arg0);
-//					}
-//				});
-//				
-//			}else{
-//				((ImageView)v).setImageResource(R.drawable.ic_action_fav_normal);
-//				favRelaton.remove(qiangYu);
-//				user.setFavorite(favRelaton);
-//				ActivityUtil.show(mContext, "取消收藏。");
-//				user.update(mContext, new UpdateListener() {
-//					
-//					@Override
-//					public void onSuccess() {
-//						// TODO Auto-generated method stub
-//						DatabaseUtil.getInstance(mContext).deleteFav(qiangYu);
-//						LogUtils.i(TAG, "取消收藏。");
-//						//try get fav to see if fav success
-////						getMyFavourite();
-//					}
-//
-//					@Override
-//					public void onFailure(int arg0, String arg1) {
-//						// TODO Auto-generated method stub
-//						LogUtils.i(TAG, "取消收藏失败。请检查网络~");
-//						ActivityUtil.show(mContext, "取消收藏失败。请检查网络~"+arg0);
-//					}
-//				});
-//			}
-//			
-//
-//		}else{
-//			//前往登录注册界面
-//			ActivityUtil.show(mContext, "收藏前请先登录。");
-//			Intent intent = new Intent();
-//			intent.setClass(mContext, RegisterAndLoginActivity.class);
-//			MyApplication.getInstance().getTopActivity().startActivityForResult(intent, SAVE_FAVOURITE);
-//		}
-//	}
-//	
-//	private void getMyFavourite(){
-//		User user = BmobUser.getCurrentUser(mContext, User.class);
-//		if(user!=null){
-//			BmobQuery<QiangYu> query = new BmobQuery<QiangYu>();
-//			query.addWhereRelatedTo("favorite", new BmobPointer(user));
-//			query.include("user");
-//			query.order("createdAt");
-//			query.setLimit(Constant.NUMBERS_PER_PAGE);
-//			query.findObjects(mContext, new FindListener<QiangYu>() {
-//				
-//				@Override
-//				public void onSuccess(List<QiangYu> data) {
-//					// TODO Auto-generated method stub
-//					LogUtils.i(TAG,"get fav success!"+data.size());
-//					ActivityUtil.show(mContext, "fav size:"+data.size());
-//				}
-//
-//				@Override
-//				public void onError(int arg0, String arg1) {
-//					ActivityUtil.show(mContext, "获取收藏失败。请检查网络~");
-//				}
-//			});
-//		}else{
-//			//前往登录注册界面
-//			ActivityUtil.show(mContext, "获取收藏前请先登录。");
-//			Intent intent = new Intent();
-//			intent.setClass(mContext, RegisterAndLoginActivity.class);
-//			MyApplication.getInstance().getTopActivity().startActivityForResult(intent,Constant.GET_FAVOURITE);
-//		}
-//	}
+
 }

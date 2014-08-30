@@ -28,7 +28,7 @@
 	            android:layout_marginLeft="10dp"
 	            android:layout_toRightOf="@+id/iv_user_avatar"
 	            style="@style/TextTheme.tipstheme_buttontext"
-	            android:text="了然月夜雨" />
+	            android:text="未设置" />
 	
 	         <TextView
 	             android:id="@+id/tv_user_signature"
@@ -80,7 +80,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="男"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -110,7 +110,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="1989-10-28"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -140,7 +140,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="吃饭，睡觉，打豆豆。。。。"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -170,7 +170,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="wizardholy@163.com"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -199,7 +199,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="2014-08-11"
+	            android:text="未设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />

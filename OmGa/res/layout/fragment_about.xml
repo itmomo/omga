@@ -46,28 +46,28 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/sign"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="18dp"
         android:text="色剂湿:wizardholy"
         android:textColor="#888888"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/copyright"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/designer"
-        android:layout_centerHorizontal="true"
-        android:text="wizardholy@163.com"
-        android:textColor="#888888" />
-
-    <TextView
         android:id="@+id/programar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/copyright"
+        android:layout_below="@+id/designer"
+        android:layout_marginTop="8dp"
         android:layout_centerHorizontal="true"
         android:text="攻城狮:wizardholy"
         android:textColor="#888888"
         android:textSize="16sp" />
-
+	<TextView
+        android:id="@+id/contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/programar"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:text="联系方式:wizardholy@163.com"
+        android:textColor="#888888" />
 </RelativeLayout>
