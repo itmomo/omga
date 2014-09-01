@@ -42,6 +42,43 @@
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
             android:layout_alignParentRight="true"
+            android:paddingRight="15dp"
+            android:layout_centerVertical="true"
+            android:button="@drawable/selector_push_switch"
+            android:checked="true"
+            />
+    </RelativeLayout>
+    <View 
+	    android:layout_width="match_parent"
+	    android:layout_height="1px"
+	    android:background="#eeeeee"
+	    />
+	
+	<RelativeLayout 
+        android:id="@+id/settings_auto_download_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/selector_settings_item_down"
+        >
+        <TextView 
+            android:id="@+id/settings_auto_download_image_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextTheme.tipstheme"
+            android:text="自动下载图片"
+            android:layout_centerVertical="true"
+            android:paddingTop="8dp"
+        	android:paddingBottom="8dp"
+            />
+        <CheckBox 
+            android:id="@+id/settings_auto_download_image_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:paddingRight="15dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:button="@drawable/selector_push_switch"
             android:checked="true"

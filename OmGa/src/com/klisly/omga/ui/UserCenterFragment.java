@@ -112,13 +112,13 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 				mTvSignature.setText(user.getSignature());
 			if(user.getGender()!=null){
 				mTvGender.setText("保密");
-				sputil.setValue("sex_settings", 2);
+				mSharedPreferenceUtils.setValue("sex_settings", 2);
 				if(user.getGender().equals(Constant.SEX_FEMALE)){
 					mTvGender.setText("女");
-					sputil.setValue("sex_settings", 0);
+					mSharedPreferenceUtils.setValue("sex_settings", 0);
 				}else if(user.getGender().equals(Constant.SEX_MALE)){
 					mTvGender.setText("男");
-					sputil.setValue("sex_settings", 1);
+					mSharedPreferenceUtils.setValue("sex_settings", 1);
 				}
 			}
 			BmobFile avatarFile = user.getAvatar();

@@ -17,7 +17,7 @@ import android.preference.PreferenceManager;
  * @author adison
  * 
  */
-public class Sputil {
+public class SharedPreferenceUtils {
 	private Context context;
 	private SharedPreferences sp = null;
 	private Editor edit = null;
@@ -27,7 +27,7 @@ public class Sputil {
 	 * 
 	 * @param context
 	 */
-	public Sputil(Context context) {
+	public SharedPreferenceUtils(Context context) {
 		this(context, PreferenceManager.getDefaultSharedPreferences(context));
 	}
 
@@ -37,7 +37,7 @@ public class Sputil {
 	 * @param context
 	 * @param filename
 	 */
-	public Sputil(Context context, String filename) {
+	public SharedPreferenceUtils(Context context, String filename) {
 		this(context, context.getSharedPreferences(filename,
 				Context.MODE_WORLD_WRITEABLE));
 	}
@@ -48,7 +48,7 @@ public class Sputil {
 	 * @param context
 	 * @param sp
 	 */
-	public Sputil(Context context, SharedPreferences sp) {
+	public SharedPreferenceUtils(Context context, SharedPreferences sp) {
 		this.context = context;
 		this.sp = sp;
 		edit = sp.edit();

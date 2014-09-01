@@ -24,6 +24,7 @@ import com.klisly.omga.entity.User;
 import com.klisly.omga.proxy.UserProxy;
 import com.klisly.omga.ui.UserLoginActivity;
 import com.klisly.omga.utils.ActivityUtil;
+import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -95,23 +96,9 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 			viewHolder.contentImage.setVisibility(View.GONE);
 		}else{
 			viewHolder.contentImage.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance()
-			.displayImage(entity.getUrl_image()==null?"":entity.getUrl_image(), viewHolder.contentImage, 
-					MyApplication.getInstance().getOptions(R.drawable.bg_pic_loading),
-					new SimpleImageLoadingListener(){
-	
-						@Override
-						public void onLoadingComplete(String imageUri, View view,
-								Bitmap loadedImage) {
-							super.onLoadingComplete(imageUri, view, loadedImage);
-							 float[] cons=ActivityUtil.getBitmapConfiguration(loadedImage, viewHolder.contentImage, 1.0f);
-	                         RelativeLayout.LayoutParams layoutParams=
-	                             new RelativeLayout.LayoutParams((int)cons[0], (int)cons[1]);
-	                         layoutParams.addRule(RelativeLayout.BELOW,R.id.content_text);
-	                         viewHolder.contentImage.setLayoutParams(layoutParams);
-						}
-				
-			});
+			if(mSharedPreferenceUtils.getValue(Constant.PREFERENCE_AUTO_DOWNLOAD_IMAGE, true)){
+				loadImage(entity.getUrl_image(),viewHolder.contentImage);
+			}
 		}
 		viewHolder.love.setText(entity.getGood()+"");
 		LogUtils.i("love",entity.getGood()+"..");
@@ -206,6 +193,14 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 
 		});
 		
+		viewHolder.contentImage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				loadImage(entity.getUrl_image(),viewHolder.contentImage);
+			}
+		});
+		
 		viewHolder.share.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -241,6 +236,26 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 		});
 
 		return convertView;
+	}
+	private void loadImage(String image,final ImageView imageView) {
+		ImageLoader.getInstance()
+		.displayImage(image==null?"":image, imageView, 
+				MyApplication.getInstance().getOptions(R.drawable.bg_pic_loading),
+				new SimpleImageLoadingListener(){
+
+					@Override
+					public void onLoadingComplete(String imageUri, View view,
+							Bitmap loadedImage) {
+						super.onLoadingComplete(imageUri, view, loadedImage);
+						 float[] cons=ActivityUtil.getBitmapConfiguration(loadedImage, imageView, 1.0f);
+                         RelativeLayout.LayoutParams layoutParams=
+                             new RelativeLayout.LayoutParams((int)cons[0], (int)cons[1]);
+                         layoutParams.addRule(RelativeLayout.BELOW,R.id.content_text);
+                         imageView.setLayoutParams(layoutParams);
+					}
+			
+		});
+		
 	}
 	public static class ViewHolder{
 		public RelativeLayout header;

@@ -2,6 +2,9 @@ package com.klisly.omga.adapter;
 
 import java.util.List;
 
+import com.klisly.omga.utils.Constant;
+import com.klisly.omga.utils.SharedPreferenceUtils;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +22,7 @@ public abstract class BaseContentAdapter<T> extends BaseAdapter{
 	protected Context mContext;
 	protected List<T> dataList ;
 	protected LayoutInflater mInflater;
-	
+	protected SharedPreferenceUtils mSharedPreferenceUtils;
 	
 	
 	public List<T> getDataList() {
@@ -34,6 +37,9 @@ public abstract class BaseContentAdapter<T> extends BaseAdapter{
 		mContext = context;
 		dataList = list;
 		mInflater = LayoutInflater.from(mContext);
+		if(null == mSharedPreferenceUtils){
+			mSharedPreferenceUtils = new SharedPreferenceUtils(mContext, Constant.PRE_NAME);
+		}
 	}
 	
 	@Override

@@ -48,10 +48,11 @@ import com.umeng.update.UpdateStatus;
 
 public class SettingsFragment extends BaseHomeFragment implements OnClickListener,OnCheckedChangeListener{
 
-	TextView logout;
-	RelativeLayout update ;
-	RelativeLayout cleanCache;
-	CheckBox pushSwitch;
+	TextView mTvLogOut;
+	RelativeLayout mRlUpdate ;
+	RelativeLayout mRlCleanCache;
+	CheckBox mPushSwitch;
+	private CheckBox mAutoDownloadImageSwitch;
 	static final int GO_LOGIN = 13;
 	public static SettingsFragment newInstance(){
 		SettingsFragment fragment = new SettingsFragment();
@@ -60,31 +61,41 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 	
 	@Override
 	protected int getLayoutId() {
-		// TODO Auto-generated method stub
 		return R.layout.fragment_settings;
 	}
 
 	@Override
 	protected void findViews(View view) {
-		logout = (TextView) view.findViewById(R.id.user_logout);
-		update = (RelativeLayout)view.findViewById(R.id.settings_update);
-		cleanCache = (RelativeLayout)view.findViewById(R.id.settings_cache);
-		pushSwitch = (CheckBox)view.findViewById(R.id.settings_push_switch);
+		mTvLogOut = (TextView) view.findViewById(R.id.user_logout);
+		mRlUpdate = (RelativeLayout)view.findViewById(R.id.settings_update);
+		mRlCleanCache = (RelativeLayout)view.findViewById(R.id.settings_cache);
+		mPushSwitch = (CheckBox)view.findViewById(R.id.settings_push_switch);
+		mAutoDownloadImageSwitch = (CheckBox)view.findViewById(R.id.settings_auto_download_image_switch);
 	}
 
 	@Override
 	protected void setupViews(Bundle bundle) {
-		if(!isLogined()){
-			logout.setText("登录");
+		if(mSharedPreferenceUtils.getValue(Constant.PREFERENCE_AUTO_DOWNLOAD_IMAGE, true)){
+			mAutoDownloadImageSwitch.setChecked(true);
 		}else{
-			logout.setText("注销登录");
+			mAutoDownloadImageSwitch.setChecked(false);
 		}
+		if(mSharedPreferenceUtils.getValue(Constant.PREFERENCE_PUSH_SERVICE, true)){
+			mPushSwitch.setChecked(true);
+		}else{
+			mPushSwitch.setChecked(false);
+		}
+		if(!isLogined()){
+			mTvLogOut.setText("登录");
+		}else{
+			mTvLogOut.setText("注销登录");
+		}
+		
 	}
 
 	
 	@Override
 	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
 		super.onAttach(activity);
 		try{
 //			mIProgressControllor = (IProgressControllor)activity;
@@ -107,22 +118,20 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 	
 	@Override
 	protected void setListener() {
-		// TODO Auto-generated method stub
-		logout.setOnClickListener(this);
-		update.setOnClickListener(this);
-		cleanCache.setOnClickListener(this);
-		pushSwitch.setOnCheckedChangeListener(this);
+		mTvLogOut.setOnClickListener(this);
+		mRlUpdate.setOnClickListener(this);
+		mRlCleanCache.setOnClickListener(this);
+		mPushSwitch.setOnCheckedChangeListener(this);
+		mAutoDownloadImageSwitch.setOnCheckedChangeListener(this);
 	}
 
 	@Override
 	protected void fetchData() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.settings_update:
 			Toast.makeText(mContext, "正在检查。。。", Toast.LENGTH_SHORT).show();
@@ -131,7 +140,6 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 
 				@Override
 				public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
-					// TODO Auto-generated method stub
 					switch (updateStatus) {
 			        case UpdateStatus.Yes: // has update
 			            UmengUpdateAgent.showUpdateDialog(mContext, updateInfo);
@@ -187,7 +195,6 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 			
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				albumDialog.dismiss();
 				Date date1 = new Date(System.currentTimeMillis());
 				dateTime = date1.getTime() + "";
@@ -198,7 +205,6 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				albumDialog.dismiss();
 				Date date = new Date(System.currentTimeMillis());
 				dateTime = date.getTime() + "";
@@ -235,19 +241,25 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		// TODO Auto-generated method stub
 		switch (buttonView.getId()) {
 		case R.id.settings_push_switch:
 			if(isChecked){
 				//接受推送，储存值
-				sputil.setValue("isPushOn", true);
+				mSharedPreferenceUtils.setValue(Constant.PREFERENCE_PUSH_SERVICE, true);
 				PushAgent mPushAgent = PushAgent.getInstance(mContext);
 				mPushAgent.enable();
 			}else{
 				//关闭推送，储存值
-				sputil.setValue("isPushOn", false);
+				mSharedPreferenceUtils.setValue(Constant.PREFERENCE_PUSH_SERVICE, false);
 				PushAgent mPushAgent = PushAgent.getInstance(mContext);
 				mPushAgent.disable();
+			}
+			break;
+		case R.id.settings_auto_download_image_switch:
+			if(isChecked){
+				mSharedPreferenceUtils.setValue(Constant.PREFERENCE_AUTO_DOWNLOAD_IMAGE, true);
+			}else{
+				mSharedPreferenceUtils.setValue(Constant.PREFERENCE_AUTO_DOWNLOAD_IMAGE, false);
 			}
 			break;
 		default:
@@ -259,7 +271,6 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 	String iconUrl;
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == Activity.RESULT_OK){
 			switch (requestCode) {

@@ -73,9 +73,6 @@ public interface Constant {
 	//含义：BmobObject（数据表名称）格式不正确
 	public static final int BMOB_CODE_BMOBOBJECT_FORMAT_ERROR=9013;
 
-
-	
-
-
-	
+	public static final String PREFERENCE_PUSH_SERVICE="PREFERENCE_PUSH_SERVICE";
+	public static final String PREFERENCE_AUTO_DOWNLOAD_IMAGE="AUTO_DOWNLOAD_IMAGE";
 }

@@ -2,7 +2,7 @@ package com.klisly.omga.ui.base;
 
 
 import com.klisly.omga.utils.Constant;
-import com.klisly.omga.utils.Sputil;
+import com.klisly.omga.utils.SharedPreferenceUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -19,15 +19,15 @@ import android.support.v4.app.Fragment;
 public abstract class BaseFragment extends Fragment{
 	public static String TAG;
 	protected Context mContext;
-	protected Sputil sputil;
+	protected SharedPreferenceUtils mSharedPreferenceUtils;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		TAG = this.getClass().getSimpleName();
 		mContext = getActivity();
-		if(null == sputil){
-			sputil = new Sputil(mContext, Constant.PRE_NAME);
+		if(null == mSharedPreferenceUtils){
+			mSharedPreferenceUtils = new SharedPreferenceUtils(mContext, Constant.PRE_NAME);
 		}
 	}
 	

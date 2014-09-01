@@ -2,7 +2,7 @@ package com.klisly.omga.ui.base;
 
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.utils.Constant;
-import com.klisly.omga.utils.Sputil;
+import com.klisly.omga.utils.SharedPreferenceUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 
@@ -19,7 +19,7 @@ public class BaseActivity extends FragmentActivity implements OnSharedPreference
 	protected static String TAG ;
 	
 	protected MyApplication mMyApplication;
-	protected Sputil sputil;
+	protected SharedPreferenceUtils sputil;
 	protected Resources mResources;
 	protected Context mContext;
 	
@@ -41,7 +41,7 @@ public class BaseActivity extends FragmentActivity implements OnSharedPreference
 		}
 		mMyApplication.addActivity(this);
 		if(null == sputil){
-			sputil = new Sputil(this, Constant.PRE_NAME);
+			sputil = new SharedPreferenceUtils(this, Constant.PRE_NAME);
 		}
 		sputil.getInstance().registerOnSharedPreferenceChangeListener(this);
 		mResources = getResources();

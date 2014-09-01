@@ -25,8 +25,6 @@ public class MyApplication extends Application{
 	
 	private static MyApplication myApplication = null;
 	
-	private Qiushi currentQiushi = null;
-	
 	public static MyApplication getInstance(){
 		return myApplication;
 	}
@@ -47,12 +45,7 @@ public class MyApplication extends Application{
 		initImageLoader();
 	}
 
-	public Qiushi getCurrentQiushi() {
-		return currentQiushi;
-	}
-	public void setCurrentQiushi(Qiushi currentQiushi) {
-		this.currentQiushi = currentQiushi;
-	}
+
 	public void addActivity(Activity ac){
 		ActivityManagerUtils.getInstance().addActivity(ac);
 	}

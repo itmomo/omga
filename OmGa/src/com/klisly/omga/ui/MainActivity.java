@@ -147,25 +147,29 @@ public class MainActivity extends SlidingFragmentActivity implements
 	@Override
 	public void onBackPressed() {
 		if (firstTime + 2000 > System.currentTimeMillis()) {
-			if (!show) {
+			if (ActivityUtil.hasNetwork(MainActivity.this)&&!show&&SpotManager.getInstance(MainActivity.this).checkLoadComplete()) {
+				LogUtils.i(TAG, "show ad");
 				// 展示插播广告，可以不调用loadSpot独立使用
 				SpotManager.getInstance(MainActivity.this).showSpotAds(
 						MainActivity.this, new SpotDialogListener() {
 							@Override
 							public void onShowSuccess() {
 								Log.i("MainActivity", "展示成功");
+								show = true;
 							}
 
 							@Override
 							public void onShowFailed() {
 								Log.i("MainActivity", "展示失败");
+								show = true;
 							}
 
 						}); // //
-				show = true;
-			} else if(SpotManager.getInstance(MainActivity.this).checkLoadComplete()) {
+			} else{
+				LogUtils.i(TAG, "exit app");
 				SpotManager.getInstance(MainActivity.this).disMiss(true);
 				MyApplication.getInstance().exit();
+				show = false;
 				super.onBackPressed();
 			}
 		} 

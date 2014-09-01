@@ -1,8 +1,14 @@
 package com.klisly.omga.ui;
 
 import net.youmi.android.AdManager;
+import net.youmi.android.banner.AdSize;
+import net.youmi.android.banner.AdView;
+import net.youmi.android.diy.banner.DiyAdSize;
+import net.youmi.android.diy.banner.DiyBanner;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import cn.bmob.v3.Bmob;
 
 import com.klisly.omga.R;
@@ -24,18 +30,16 @@ import com.umeng.message.UmengRegistrar;
 public class SplashActivity extends BaseActivity {
 
 	private static final long DELAY_TIME = 2000L;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		//Bmob SDK初始化--只需要这一段代码即可完成初始化
-				//请到Bmob官网(http://www.bmob.cn/)申请ApplicationId,具体地址:http://docs.bmob.cn/android/faststart/index.html?menukey=fast_start&key=start_android
 		Bmob.initialize(this, Constant.BMOB_APP_ID);
 		LogUtils.i(TAG,TAG + " Launched ！");
 		//友盟统计反馈代码
 		MobclickAgent.openActivityDurationTrack(UmengStat.IS_OPEN_ACTIVITY_AUTO_STAT);
 		FeedbackAgent agent = new FeedbackAgent(this);
+		AdManager.getInstance(mContext).init("ad08ed9b63b3e95f", "abf86ba7453e1f20", false);
 		agent.sync();
 		//打开首页
 		redirectByTime();
@@ -49,8 +53,6 @@ public class SplashActivity extends BaseActivity {
 			mPushAgent.disable();
 		}
 		
-		AdManager.getInstance(mContext).init("ad08ed9b63b3e95f", "abf86ba7453e1f20", false);
-		
 	}
 	
 	/**
@@ -58,7 +60,6 @@ public class SplashActivity extends BaseActivity {
 	 */
 	private void redirectByTime() {
 		new Handler().postDelayed(new Runnable() {
-			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub

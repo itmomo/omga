@@ -81,9 +81,9 @@ public class EditNameFragment extends BaseHomeFragment{
 				}
 				
 				@Override
-				public void onFailure(int arg0, String arg1) {
+				public void onFailure(int code, String msg) {
 					// TODO Auto-generated method stub
-					ActivityUtil.show(getActivity(), "更改信息失败。请检查网络");
+					ActivityUtil.show(getActivity(), "更改信息失败。"+msg);
 				}
 			});
 		}
