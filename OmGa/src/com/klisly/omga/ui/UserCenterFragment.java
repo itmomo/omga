@@ -146,12 +146,16 @@ public class UserCenterFragment extends BaseHomeFragment implements OnClickListe
 			}else{
 				mTvEmail.setVisibility(View.GONE);
 			}
+			if(user.getSessionToken()!=null){
+				mRlBtnVerifyEmail.setVisibility(View.GONE);
+			}
 			System.out.println(user.getEmailVerified());
 			if(user!=null&&user.getEmail()!=null && user.getEmailVerified()!=null&&user.getEmailVerified()){
 				mTvEmailVerifyTip.setVisibility(View.GONE);
 			}else{
 				mTvEmailVerifyTip.setVisibility(View.VISIBLE);
 			}
+				
 			
 			if(user.getPhoneserial()!=null)
 			mTvUsedPhone.setText(user.getPhoneserial());

@@ -25,6 +25,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.adapter.AIContentAdapter;
+import com.klisly.omga.db.DatabaseUtil;
 import com.klisly.omga.entity.Qiushi;
 import com.klisly.omga.entity.User;
 import com.klisly.omga.ui.base.BaseFragment;
@@ -167,10 +168,9 @@ public class FavoritContentFragment extends BaseFragment{
 						mListItems.addAll(list);
 					}
 					
-					if(MyApplication.getInstance().getCurrentUser()!=null){
-						//从本地获取缓存数据
-//						list = DatabaseUtil.getInstance(mContext).setFav(list);
-					}
+					//缓存数据到本体
+					DatabaseUtil.getInstance(mContext).insertQiushiList(list);
+					
 					mAdapter.notifyDataSetChanged();;
 					
 					setState(LOADING_COMPLETED);

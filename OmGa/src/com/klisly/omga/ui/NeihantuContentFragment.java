@@ -27,6 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.adapter.AIContentAdapter;
+import com.klisly.omga.db.DatabaseUtil;
 import com.klisly.omga.entity.Qiushi;
 import com.klisly.omga.ui.base.BaseFragment;
 import com.klisly.omga.utils.ActivityUtil;
@@ -102,7 +103,6 @@ public class NeihantuContentFragment extends BaseFragment{
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
@@ -116,7 +116,6 @@ public class NeihantuContentFragment extends BaseFragment{
 
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				mRefreshType = RefreshType.LOAD_MORE;
 				fetchData();
 			}
@@ -125,7 +124,6 @@ public class NeihantuContentFragment extends BaseFragment{
 
 			@Override
 			public void onLastItemVisible() {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -159,30 +157,7 @@ public class NeihantuContentFragment extends BaseFragment{
 			
 			@Override
 			public void onSuccess(List<Qiushi> list) {
-				// TODO Auto-generated method stub
-				LogUtils.i(TAG,"find success."+list.size());
-				if(list.size()!=0&&list.get(list.size()-1)!=null){
-					if(mRefreshType==RefreshType.REFRESH){
-						mListItems.clear();
-					}
-					if(list.size()<Constant.NUMBERS_PER_PAGE){
-						LogUtils.i(TAG,"已加载完所有数据~");
-					}
-					if(MyApplication.getInstance().getCurrentUser()!=null){
-						//从本地获取缓存数据
-//						list = DatabaseUtil.getInstance(mContext).setFav(list);
-					}
-					mListItems.addAll(list);
-					mAdapter.notifyDataSetChanged();;
-					
-					setState(LOADING_COMPLETED);
-					mPullRefreshListView.onRefreshComplete();
-				}else{
-					ActivityUtil.show(getActivity(), "暂无更多数据~");
-					pageNum--;
-					setState(LOADING_COMPLETED);
-					mPullRefreshListView.onRefreshComplete();
-				}
+				fillNewData(list);
 			}
 
 			@Override
@@ -196,6 +171,33 @@ public class NeihantuContentFragment extends BaseFragment{
 		});
 	}
 	
+	protected void fillNewData(List<Qiushi> list) {
+		LogUtils.i(TAG,"find success."+list.size());
+		if(list.size()!=0&&list.get(list.size()-1)!=null){
+			if(mRefreshType==RefreshType.REFRESH){
+				mListItems.clear();
+			}
+			if(list.size()<Constant.NUMBERS_PER_PAGE){
+				LogUtils.i(TAG,"已加载完所有数据~");
+			}
+			
+			//缓存数据到本体
+			DatabaseUtil.getInstance(mContext).insertQiushiList(list);
+			
+			mListItems.addAll(list);
+			mAdapter.notifyDataSetChanged();;
+			
+			setState(LOADING_COMPLETED);
+			mPullRefreshListView.onRefreshComplete();
+		}else{
+			ActivityUtil.show(getActivity(), "暂无更多数据~");
+			pageNum--;
+			setState(LOADING_COMPLETED);
+			mPullRefreshListView.onRefreshComplete();
+		}
+		
+	}
+
 	private static final int LOADING = 1;
 	private static final int LOADING_COMPLETED = 2;
 	private static final int LOADING_FAILED =3;

@@ -1,15 +1,12 @@
 package com.klisly.omga.ui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,25 +18,20 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
 
-import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
+import com.klisly.omga.db.DBHelper;
+import com.klisly.omga.db.DatabaseUtil;
 import com.klisly.omga.entity.User;
 import com.klisly.omga.ui.base.BaseHomeFragment;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.CacheUtils;
 import com.klisly.omga.utils.Constant;
-import com.klisly.omga.utils.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.umeng.message.PushAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
@@ -85,23 +77,22 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 		}else{
 			mPushSwitch.setChecked(false);
 		}
+		displayLogOutBtn();
+		
+	}
+
+	
+	private void displayLogOutBtn() {
 		if(!isLogined()){
 			mTvLogOut.setText("登录");
 		}else{
 			mTvLogOut.setText("注销登录");
 		}
-		
 	}
 
-	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		try{
-//			mIProgressControllor = (IProgressControllor)activity;
-		}catch(ClassCastException e){
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -160,6 +151,7 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 			break;
 		case R.id.settings_cache:
 			ImageLoader.getInstance().clearDiscCache();
+			DatabaseUtil.getInstance(getActivity()).clearQiushiTable();
 			ActivityUtil.show(getActivity(), "清除缓存完毕");
 			break;
 		case R.id.user_logout:
@@ -288,6 +280,8 @@ public class SettingsFragment extends BaseHomeFragment implements OnClickListene
 					return;
 				}
 				break;
+			case GO_LOGIN:
+				displayLogOutBtn();
 			default:
 				break;
 			}

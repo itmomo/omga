@@ -31,6 +31,8 @@ public interface Constant {
 	public static final int DUANZI = 0;
 	public static final int NEIHANTU = 1;
 
+	public static final int MAX_CACHE_DATA_NUM=2000;
+	
 	public static final int PUBLISH_COMMENT = 1;
 	public static final int NUMBERS_PER_PAGE = 15;//每次请求返回评论条数
 	public static final int SAVE_FAVOURITE = 2;

@@ -3,6 +3,7 @@ package com.klisly.omga.ui;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import android.app.Activity;
@@ -22,16 +23,16 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.klisly.omga.MyApplication;
 import com.klisly.omga.R;
 import com.klisly.omga.adapter.AIContentAdapter;
+import com.klisly.omga.db.DatabaseUtil;
 import com.klisly.omga.entity.Qiushi;
 import com.klisly.omga.ui.base.BaseFragment;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.Constant;
 import com.klisly.omga.utils.LogUtils;
+import com.klisly.omga.utils.NetworkUtil;
 /**
  * 添加段子图页面
  * @author wizardholy 
@@ -104,6 +105,7 @@ public class DuanziContentFragment extends BaseFragment{
 				pullFromUser = true;
 				mRefreshType = RefreshType.REFRESH;
 				pageNum = 0;
+				localDataPageNum=0;
 				lastItemTime = getCurrentTime();
 				fetchData();
 			}
@@ -125,19 +127,71 @@ public class DuanziContentFragment extends BaseFragment{
 		mListItems = new ArrayList<Qiushi>();
 		mAdapter = new AIContentAdapter(mContext, mListItems);
 		actualListView.setAdapter(mAdapter);
+		loadLocalData();
 		if(mListItems.size() == 0){
 			fetchData();
 		}
-		mPullRefreshListView.setState(State.RELEASE_TO_REFRESH, true);
 		return contentView;
+	} 
+	private  int localDataPageNum=0;
+	
+	private void loadLocalData() {
+		ArrayList<Qiushi> list = DatabaseUtil.getInstance(mContext).queryDuanziQiushis(localDataPageNum,Constant.NUMBERS_PER_PAGE);
+		if(list.size()>0){
+			fillNewData(list);
+			localDataPageNum++;
+		}
+	}
+	public void fetchData(){
+		setState(LOADING);
+		if(NetworkUtil.isAvailable(getActivity())){
+			getDuanData();
+		}else{
+			loadLocalData();
+		}
+		
+	}
+	private HashSet<String> idSet = new HashSet<String>();
+	private void removeDuplicate(List<Qiushi> list) {
+		for(int i = 0 ; i < list.size();){
+			if(idSet.contains(list.get(i).getObjectId())){
+				list.remove(i);
+			}else{
+				i++;
+			}
+		}
 	}
 	
-	public void fetchData(){
-			getDuanData();
+	protected void fillNewData(List<Qiushi> list) {
+		LogUtils.i(TAG,"find success."+list.size());
+		if(list.size()!=0){
+			removeDuplicate(list);
+			if(list.size()>0&&mRefreshType==RefreshType.REFRESH){
+				mListItems.clear();
+			}
+			if(list.size()<Constant.NUMBERS_PER_PAGE){
+				LogUtils.i(TAG,"已加载完所有数据~");
+			}
+			//缓存数据到本体
+			DatabaseUtil.getInstance(mContext).insertQiushiList(list);
+			
+			for(Qiushi qiushi : list){
+				idSet.add(qiushi.getObjectId());
+			}
+			
+			mListItems.addAll(list);
+			mAdapter.notifyDataSetChanged();
+			setState(LOADING_COMPLETED);
+			mPullRefreshListView.onRefreshComplete();
+		}else{
+			ActivityUtil.show(getActivity(), "暂无更多数据~");
+			pageNum--;
+			setState(LOADING_COMPLETED);
+			mPullRefreshListView.onRefreshComplete();
+		}
 	}
 	
 	private void getDuanData() {
-		setState(LOADING);
 		BmobQuery<Qiushi> query = new BmobQuery<Qiushi>();
 		query.order("-createdAt");
 //		query.setCachePolicy(CachePolicy.CACHE_ELSE_NETWORK);
@@ -153,34 +207,11 @@ public class DuanziContentFragment extends BaseFragment{
 			
 			@Override
 			public void onSuccess(List<Qiushi> list) {
-				LogUtils.i(TAG,"find success."+list.size());
-				if(list.size()!=0&&list.get(list.size()-1)!=null){
-					if(mRefreshType==RefreshType.REFRESH){
-						mListItems.clear();
-					}
-					if(list.size()<Constant.NUMBERS_PER_PAGE){
-						LogUtils.i(TAG,"已加载完所有数据~");
-					}
-					if(MyApplication.getInstance().getCurrentUser()!=null){
-						//从本地获取缓存数据
-//						list = DatabaseUtil.getInstance(mContext).setFav(list);
-					}
-					mListItems.addAll(list);
-					mAdapter.notifyDataSetChanged();
-					
-					setState(LOADING_COMPLETED);
-					mPullRefreshListView.onRefreshComplete();
-				}else{
-					ActivityUtil.show(getActivity(), "暂无更多数据~");
-					pageNum--;
-					setState(LOADING_COMPLETED);
-					mPullRefreshListView.onRefreshComplete();
-				}
+				fillNewData(list);
 			}
 
 			@Override
 			public void onError(int code, String msg) {
-				// TODO Auto-generated method stub
 				LogUtils.i(TAG,"find failed."+msg);
 				pageNum--;
 				setState(LOADING_FAILED);
@@ -207,7 +238,6 @@ public class DuanziContentFragment extends BaseFragment{
 		case LOADING_COMPLETED:
 			networkTips.setVisibility(View.GONE);
 			progressbar.setVisibility(View.GONE);
-			
 		    mPullRefreshListView.setVisibility(View.VISIBLE);
 		    mPullRefreshListView.setMode(Mode.BOTH);
 

@@ -20,6 +20,7 @@ import com.klisly.omga.R;
 import com.klisly.omga.proxy.UserProxy;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.LogUtils;
+import com.klisly.omga.utils.NetworkUtil;
 
 public class MainActivity extends SlidingFragmentActivity implements
 		OnClickListener {
@@ -147,7 +148,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	@Override
 	public void onBackPressed() {
 		if (firstTime + 2000 > System.currentTimeMillis()) {
-			if (ActivityUtil.hasNetwork(MainActivity.this)&&!show&&SpotManager.getInstance(MainActivity.this).checkLoadComplete()) {
+			if (NetworkUtil.isAvailable(MainActivity.this)&&!show&&SpotManager.getInstance(MainActivity.this).checkLoadComplete()) {
 				LogUtils.i(TAG, "show ad");
 				// 展示插播广告，可以不调用loadSpot独立使用
 				SpotManager.getInstance(MainActivity.this).showSpotAds(

@@ -25,7 +25,9 @@ import com.klisly.omga.proxy.UserProxy;
 import com.klisly.omga.ui.UserLoginActivity;
 import com.klisly.omga.utils.ActivityUtil;
 import com.klisly.omga.utils.Constant;
+import com.klisly.omga.utils.ImageUtils;
 import com.klisly.omga.utils.LogUtils;
+import com.klisly.omga.utils.NetworkUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
@@ -96,8 +98,10 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 			viewHolder.contentImage.setVisibility(View.GONE);
 		}else{
 			viewHolder.contentImage.setVisibility(View.VISIBLE);
-			if(mSharedPreferenceUtils.getValue(Constant.PREFERENCE_AUTO_DOWNLOAD_IMAGE, true)){
-				loadImage(entity.getUrl_image(),viewHolder.contentImage);
+			if(isAutoDownloadImage()){
+				ImageUtils.loadImage(entity.getUrl_image(),viewHolder.contentImage);
+			}else{
+				ImageUtils.loadImage(null,viewHolder.contentImage);
 			}
 		}
 		viewHolder.love.setText(entity.getGood()+"");
@@ -197,7 +201,7 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 			
 			@Override
 			public void onClick(View v) {
-				loadImage(entity.getUrl_image(),viewHolder.contentImage);
+				ImageUtils.loadImage(entity.getUrl_image(),viewHolder.contentImage);
 			}
 		});
 		
@@ -237,26 +241,15 @@ public class AIContentAdapter extends BaseContentAdapter<Qiushi>{
 
 		return convertView;
 	}
-	private void loadImage(String image,final ImageView imageView) {
-		ImageLoader.getInstance()
-		.displayImage(image==null?"":image, imageView, 
-				MyApplication.getInstance().getOptions(R.drawable.bg_pic_loading),
-				new SimpleImageLoadingListener(){
-
-					@Override
-					public void onLoadingComplete(String imageUri, View view,
-							Bitmap loadedImage) {
-						super.onLoadingComplete(imageUri, view, loadedImage);
-						 float[] cons=ActivityUtil.getBitmapConfiguration(loadedImage, imageView, 1.0f);
-                         RelativeLayout.LayoutParams layoutParams=
-                             new RelativeLayout.LayoutParams((int)cons[0], (int)cons[1]);
-                         layoutParams.addRule(RelativeLayout.BELOW,R.id.content_text);
-                         imageView.setLayoutParams(layoutParams);
-					}
-			
-		});
-		
+	/**
+	 * 是否自动下载图片
+	 * 自动下载情况（wifi||2G/3G设置智能下载）
+	 * @return
+	 */
+	private boolean isAutoDownloadImage() {
+		return !mSharedPreferenceUtils.getValue(Constant.PREFERENCE_AUTO_DOWNLOAD_IMAGE, true)||NetworkUtil.isWIFIActivate(mContext);
 	}
+	
 	public static class ViewHolder{
 		public RelativeLayout header;
 		public ImageView userLogo;

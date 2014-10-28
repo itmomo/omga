@@ -28,7 +28,7 @@
 	            android:layout_marginLeft="10dp"
 	            android:layout_toRightOf="@+id/iv_user_avatar"
 	            style="@style/TextTheme.tipstheme_buttontext"
-	            android:text="未设置" />
+	            android:text="请设置" />
 	
 	         <TextView
 	             android:id="@+id/tv_user_signature"
@@ -80,7 +80,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="未设置"
+	            android:text="请设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -110,7 +110,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="未设置"
+	            android:text="请设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -140,7 +140,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="未设置"
+	            android:text="请设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
@@ -177,7 +177,7 @@
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
 	            android:layout_weight="0"
-	            android:text="未设置"
+	            android:text="请设置"
 		    ></TextView>
 		     <TextView 
 	            android:id="@+id/tv_user_email_verify_tip"
@@ -213,7 +213,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            style="@style/TextTheme.tipstheme_second"
-	            android:text="未设置"
+	            android:text="请设置"
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />

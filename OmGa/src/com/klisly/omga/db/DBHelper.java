@@ -9,49 +9,53 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper{
 	
-	public static final String DATA_BASE_NAME = "qingqiang_db";
+	public static final String DATA_BASE_NAME = "omga.db";
 	public static final int DATA_BASE_VERSION = 1;
-	public static final String TABLE_NAME = "fav";
-
-	private SQLiteDatabase mDb;
+	public static final String TABLE_QIUSHI = "Qiushi";
+	private SQLiteDatabase mSqLiteDatabase;
+	
+	public static final String QIUSHI_ID = "_id";
+	public static final String QIUSHI_OBJECT_ID="objectId";
+	public static final String QIUSHI_USERNAME = "username";
+	public static final String QIUSHI_URL_AVATAR = "url_avatar";
+	public static final String QIUSHI_CONTENT = "content";
+	public static final String QIUSHI_URL_IMAGE = "url_image";
+	public static final String QIUSHI_GOOD = "good";
+	public static final String QIUSHI_BAD = "bad";
+	public static final String QIUSHI_COMMENT = "commnent";
+	public static final String QIUSHI_SHARE = "share";	
+	public static final String QIUSHI_UPDATE_AT="update_at";
 	
 	public DBHelper(Context context) {
 		super(context, DATA_BASE_NAME, null, DATA_BASE_VERSION);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
-		onCreateFavTable(db);
+		onCreateQiushiTable(db);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
 		
 	}
-
-	interface FavTable{
-		String _ID = "_id";
-		String USER_ID = "userid";
-		String OBJECT_ID = "objectid";
-		String IS_LOVE = "islove";
-		String IS_FAV = "isfav";
-	}
 	
-	private void onCreateFavTable(SQLiteDatabase db){
-		  StringBuilder favStr=new StringBuilder();
-	      favStr.append("CREATE TABLE IF NOT EXISTS ")
-	      		.append(DBHelper.TABLE_NAME)
-	      		.append(" ( ").append(FavTable._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,")
-	      		.append(FavTable.USER_ID).append(" varchar(100),")
-	      		.append(FavTable.OBJECT_ID).append(" varchar(20),")
-	      		.append(FavTable.IS_FAV)
-	      		.append(" Integer,")
-	      		.append(FavTable.IS_LOVE)
-	            .append(" Integer);");
-	      db.execSQL(favStr.toString());
+	private void onCreateQiushiTable(SQLiteDatabase db){
+		  StringBuilder createQiushiTableStr=new StringBuilder();
+	      createQiushiTableStr.append("CREATE TABLE IF NOT EXISTS ")
+	      		.append(DBHelper.TABLE_QIUSHI)
+	      		.append(" ( ").append(QIUSHI_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,")
+	      		.append(QIUSHI_OBJECT_ID).append(" varchar(100),")
+	      		.append(QIUSHI_USERNAME).append(" varchar(100),")
+	      		.append(QIUSHI_URL_AVATAR).append(" varchar(350),")
+	      		.append(QIUSHI_CONTENT).append(" TEXT,")
+	      		.append(QIUSHI_URL_IMAGE).append(" varchar(350),")
+	      		.append(QIUSHI_GOOD).append(" Integer,")
+	      		.append(QIUSHI_BAD).append(" Integer,")
+	      		.append(QIUSHI_SHARE).append(" Integer,")
+	      		.append(QIUSHI_COMMENT).append(" Integer,")
+	      		.append(QIUSHI_UPDATE_AT).append(" varchar(350));");
+	      db.execSQL(createQiushiTableStr.toString());
 	}
 	
 	
@@ -62,56 +66,48 @@ public class DBHelper extends SQLiteOpenHelper{
      */
     public synchronized SQLiteDatabase getDatabase(boolean isWrite) {
 
-        if(mDb == null || !mDb.isOpen()) {
-            if(isWrite) {
-                try {
-                    mDb=getWritableDatabase();
-                } catch(Exception e) {
-                    // 当数据库不可写时
-                    mDb=getReadableDatabase();
-                    return mDb;
-                }
-            } else {
-                mDb=getReadableDatabase();
+        if(mSqLiteDatabase == null || !mSqLiteDatabase.isOpen()) {
+            try {
+                mSqLiteDatabase=getWritableDatabase();
+            } catch(Exception e) {
+                // 当数据库不可写时
+            	e.printStackTrace();
+                mSqLiteDatabase=getReadableDatabase();
+                return mSqLiteDatabase;
             }
-        }
-        // } catch (SQLiteException e) {
-        // // 当数据库不可写时
-        // mDb = getReadableDatabase();
-        // }
-        return mDb;
+        } 
+        return mSqLiteDatabase;
     }
     
     public int delete(String table, String whereClause, String[] whereArgs) {
         getDatabase(true);
-        return mDb.delete(table, whereClause, whereArgs);
+        return mSqLiteDatabase.delete(table, whereClause, whereArgs);
     }
 
     public long insert(String table, String nullColumnHack, ContentValues values) {
         getDatabase(true);
-        return mDb.insertOrThrow(table, nullColumnHack, values);
+        return mSqLiteDatabase.insertOrThrow(table, nullColumnHack, values);
     }
 
     public int update(String table, ContentValues values, String whereClause, String[] whereArgs) {
         getDatabase(true);
-        return mDb.update(table, values, whereClause, whereArgs);
+        return mSqLiteDatabase.update(table, values, whereClause, whereArgs);
     }
 
     public Cursor rawQuery(String sql, String[] selectionArgs) {
         getDatabase(false);
-        return mDb.rawQuery(sql, selectionArgs);
+        return mSqLiteDatabase.rawQuery(sql, selectionArgs);
     }
 
     public void execSQL(String sql) {
         getDatabase(true);
-        mDb.execSQL(sql);
+        mSqLiteDatabase.execSQL(sql);
     }
 
     public Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having,
-    // final
         String orderBy) {
         getDatabase(false);
-        return mDb.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+        return mSqLiteDatabase.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
     }
 
 }
